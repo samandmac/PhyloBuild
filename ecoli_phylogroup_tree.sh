@@ -43,7 +43,7 @@ for arg in "$@"; do #This just sets it so that you can use the double --xxxx and
 done
 
 #This simply takes the arguement from the user and stores that in a variable.
-while getopts "s:a:m:u:" opt
+while getopts "s:a:m:u:e:" opt
 do
 	case "$opt" in
 		s)
@@ -164,6 +164,21 @@ do
 	elif [[ $phylogroup == "fergusonii" ]]
 	then 
 		phylogroup="FER"
+	elif [[ $phylogroup == "cladeI" ]]
+	then 
+		phylogroup="I"
+	elif [[ $phylogroup == "cladeII" ]]
+	then 
+		phylogroup="II"
+	elif [[ $phylogroup == "cladeIII" ]]
+	then 
+		phylogroup="III"
+	elif [[ $phylogroup == "cladeIV" ]]
+	then 
+		phylogroup="IV"
+	elif [[ $phylogroup == "cladeV" ]]
+	then 
+		phylogroup="V"
 	else
 		:
 	fi
@@ -177,8 +192,11 @@ then
 	echo "Removing strains assigned clade phylogroup"
 	
 	#Delete clades from phylogeny list
-	sed -i '/clade.*/d' $plots/phylogeny_list.txt 
-	
+	sed -i '/^I\b/d' $plots/phylogeny_list.txt 
+	sed -i '/^II\b/d' $plots/phylogeny_list.txt 
+	sed -i '/^III\b/d' $plots/phylogeny_list.txt 
+	sed -i '/^IV\b/d' $plots/phylogeny_list.txt 
+	sed -i '/^V\b/d' $plots/phylogeny_list.txt 
 	#Generate new list of genomes to use
 	awk '{print $2}' $plots/phylogeny_list.txt | grep -f - $plots/List.genomes.txt > $plots/new_genome_list.txt
 	

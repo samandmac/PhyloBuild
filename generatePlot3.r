@@ -53,8 +53,8 @@ phylogroup = read.table(paste(args[1],"/phylogeny_list.txt", sep = ""),
                         col.names = c("group","label"))
 phylogroup$group = as.factor(phylogroup$group) #Changing the grouping to be a factor
 phylogroup$group = factor(phylogroup$group, levels = c("A", "B1","B2","C","D",
-                                                       "E","F","G","cladeI","cladeII",
-                                                       "cladeIII","cladeIV","cladeV",
+                                                       "E","F","G","I","II",
+                                                       "III","IV","V",
                                                        "ALB","FER")) #Changing the order of factors
 
 geneMatches=read.table(paste(args[1],"/geneMatches.txt", sep=""),
@@ -122,9 +122,9 @@ nodes_added_in
 are_there_clades = args[2]
 #This part just finds if the user replied yes or no and gives a difFERent phylogroup list which is used later in a loop.
 if (are_there_clades == "yes") {
-  phylogroup_list = c("A", "B1","B2","C","D","E","F","G","cladeI","cladeII",
-                      "cladeIII","cladeIV","cladeV","ALB","FER")
-  reminder= "You're about to enter numbers for inputting phylogroup designation. Remember to list nodes in this order: A, B1, B2, C, D, E, F, G, cladeI, cladeII, cladeIII, cladeIV, cladeV, ALB, FER"
+  phylogroup_list = c("A", "B1","B2","C","D","E","F","G","I","II",
+                      "III","IV","V","ALB","FER")
+  reminder= "You're about to enter numbers for inputting phylogroup designation. Remember to list nodes in this order: A, B1, B2, C, D, E, F, G, I, II, III, IV, V, ALB, FER"
 }else{
   phylogroup_list = c("A", "B1","B2","C","D","E","F","G","ALB","FER")
   reminder="You're about to enter numbers for inputting phylogroup designation. Remember to list nodes in this order: A, B1, B2, C, D, E, F, G, ALB, FER"
@@ -193,7 +193,7 @@ if (do_you_want_pgroup_labels == "yes"){
                         name="Gene Carriage")
   
   #And finally saving that plot.
-  save_plot(plot_heatmap, 1000, 1000, paste(args[1],"/finalPlot.EMF", sep =""))
+  save_plot(plot_heatmap, 1500, 1500, paste(args[1],"/finalPlot.EMF", sep =""))
 }
 
 #Below is the script for when pgroup labels aren't required.
@@ -215,7 +215,7 @@ if (do_you_want_pgroup_labels == "no"){
                         name="Gene Carriage")
   
   #And finally saving that plot.
-  save_plot(plot_heatmap, 1000, 1000, paste(args[1],"/finalPlot.EMF", sep =""))
+  save_plot(plot_heatmap, 1500, 1500, paste(args[1],"/finalPlot.EMF", sep =""))
 }
 #If using multiple heatmaps (which is possible, so could do it for each gene of interest?) you can
 #either have multiple columns in the dataframe you are using or add another heatmap on after using
