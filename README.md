@@ -55,7 +55,7 @@ We generate a number of files in the output, they should be:
    
    **phylogeny_list.txt** (tab-separated file, one column containing assigned phylogroup and the other being the matching genome)
    
-   **The plot! As an EMF file.**
+   **The plot! As an EMF file. Shows heatmap indicating gene carriage for each strain, highlights genomes that were added in, distinct colours based on group and carriage.**
  
 # Required dependencies (and their associated dependencies)
 **ALTER** https://github.com/sing-group/ALTER  
