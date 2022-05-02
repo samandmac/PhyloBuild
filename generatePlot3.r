@@ -177,9 +177,9 @@ if (do_you_want_pgroup_labels == "yes"){
   #Back to making the actual plot now, and saving that.
   #Added in colour=group to ggtree to change the branch colour to group 
   tree.plot = ggtree(tree, layout='circular',branch.length = 'none', ladderize = FALSE, aes(colour=group), show.legend=F)+ #show.legend =F to get rid of line in legend
-    #geom_tiplab(size=3, aes(colour=group), offset=23, data = td_filter(isTip & node %in% nodes_added_in))+ #Changed geom_tiplab to be only the genomes added in
+    #geom_tiplab(size=3, aes(colour=group), offset=18, data = td_filter(isTip & node %in% nodes_added_in))+ #Changed geom_tiplab to be only the genomes added in
     #Alternative plot below, highlight branches of genomes added in, and give all the genomes names as tip labels?
-    geom_tiplab(size=3, aes(colour=group), offset=30)+ #changed offset to 28 from 26 for Clermont genes
+    geom_tiplab(size=3, aes(colour=group), offset=18)+ #changed offset to 28 from 26 for Clermont genes
     geom_hilight(mapping=aes(subset = node %in% nodes_added_in, fill = "red"))+ #Highlights nodes of genomes that were added in
     scale_color_discrete("Group",breaks = c("A", "B1","B2","C","D","E","F","G","I","II",
                                             "III","IV","V","ALB","FER"))+ #This is just another way of getting the legend in order
@@ -188,7 +188,7 @@ if (do_you_want_pgroup_labels == "yes"){
   #over the majority of strains assigned a specific phylogroup.
   
   #This adds the heatmap onto the plot
-  plot_heatmap = gheatmap(tree.plot, heatmap, offset=0, width=1, font.size=3, colnames = FALSE)+
+  plot_heatmap = gheatmap(tree.plot, heatmap, offset=0, width=0.5, font.size=3, colnames = FALSE)+
     scale_fill_discrete(breaks=geneOrder, 
                         name="Gene Carriage")
   
@@ -203,14 +203,14 @@ if (do_you_want_pgroup_labels == "no"){
   tree.plot = ggtree(tree, layout='circular',branch.length = 'none', ladderize = FALSE, aes(colour=group), show.legend=F)+ #show.legend =F to get rid of line in legend
     #geom_tiplab(size=3, aes(colour=group), offset=23, data = td_filter(isTip & node %in% nodes_added_in))+ #Changed geom_tiplab to be only the genomes added in
     #Alternative plot below, highlight branches of genomes added in, and give all the genomes names as tip labels?
-    geom_tiplab(size=3, aes(colour=group), offset=30)+ #changed offset to 28 from 26 for Clermont genes
+    geom_tiplab(size=3, aes(colour=group), offset=18)+ #changed offset to 28 from 26 for Clermont genes
     geom_hilight(mapping=aes(subset = node %in% nodes_added_in, fill = "red"))+ #Highlights nodes of genomes that were added in
     scale_color_discrete("Group",breaks = c("A", "B1","B2","C","D","E","F","G","I","II",
                                             "III","IV","V","ALB","FER"))+ #This is just another way of getting the legend in order
     guides(color = guide_legend(override.aes = list(label = "\u25A0", size = 3)))
   
   #This adds the heatmap onto the plot
-  plot_heatmap = gheatmap(tree.plot, heatmap, offset=0, width=1, font.size=3, colnames = FALSE)+
+  plot_heatmap = gheatmap(tree.plot, heatmap, offset=0, width=0.5, font.size=3, colnames = FALSE)+
     scale_fill_discrete(breaks=geneOrder, 
                         name="Gene Carriage")
   
