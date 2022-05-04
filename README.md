@@ -84,5 +84,7 @@ We generate a number of files in the output, they should be:
    
 **PhyML** https://github.com/stephaneguindon/phyml
 
+**MAFFT** https://mafft.cbrc.jp/alignment/software/source.html
+
 # Example plot generated
 ![pic](https://user-images.githubusercontent.com/100131598/165153161-2637c9de-1d17-4e18-b734-ec409baf60ef.jpg)
