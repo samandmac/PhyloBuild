@@ -13,6 +13,8 @@ This is a pipeline that can be used to generate a phylogenetic tree of E.coli, i
    **[--clades, -u]** : Indicates whether clades {I,II,III,IV,V,VI} should be included in the plot. "yes" or "no" selections only. Default is "no".
 
    **[--label, -e]** : Indicates whether the labels should be included in the end plot. Default is set to "no".
+   
+   **[--rename_genomes, -l]** : Indicates whether user has "new_names.txt" file in working directory to rename old genomes into new names. Default is "no".
 
 # Steps in pipeline
 
@@ -57,8 +59,10 @@ We generate a number of files in the output, they should be:
    
    **newRscript.r** (the R script, but with the args[x] swapped with their actual parameter e.g. file path in the R script, allows user to peruse it at their leisure, and change things if they wish)
    
-   **The plot! As an EMF file. Shows heatmap indicating gene carriage for each strain, highlights genomes that were added in, distinct colours based on group and carriage.**
- 
+   **The plot! As an EMF file. Shows heatmap indicating gene carriage for each strain, highlights genomes that were added in, distinct colours based on group and carriage.**  
+
+If the user needs to change the names of some of the genomes (for instance, those that were added in) simply make a txt file called new_names.txt and have the old genome names on the left, tab, then the new names on the right. You can place that in the working directory. If required after making the original plot, simply take genomesAdded.txt from the output directory, add new names on the same line after tabbing, and run that part of the script in the newRscript.r output in the output directory.
+
 # Required dependencies (and their associated dependencies)
 **ALTER** https://github.com/sing-group/ALTER  
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**JAVA** https://java.com/en/download/  
@@ -68,11 +72,12 @@ We generate a number of files in the output, they should be:
 
 **R** https://cran.rstudio.com/  
    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(possibly **RSTUDIO** as well) https://www.rstudio.com/products/rstudio/download/#download  
-   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;With other packages:  
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**treeDataVerse** (installed in script)  
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**BiocManager** (installed in script)  
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**remotes** (installed in script)  
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**devEMF** (installed in script)  
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;With other packages (install manually):  
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**treeDataVerse** 
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**BiocManager** 
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**remotes**  
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**devEMF** 
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**data.table**
       
 **ClermonTyping** https://github.com/A-BN/ClermonTyping  
  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**BioPython** from Python3 https://www.python.org/downloads/  
