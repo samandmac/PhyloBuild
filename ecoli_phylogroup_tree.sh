@@ -100,7 +100,7 @@ cd $genomeInterest
 for filename in *.fa; do 
    mv ${filename} "${filename%#*}"
    mv ${filename%#*} "${filename%#*}.fasta"
-   echo "Changed $filename to \"${filename%#*}\".fasta"
+   echo "Changed $filename to NAME.fasta"
 done
 
 #Change back to original directory
@@ -186,23 +186,25 @@ do
 	echo -e "${phylogroup}\t$x" >> $plots/phylogeny_list.txt
 done
 
+cd $working_directory
+
 #Finally, get the user input to determine whether to remove phylogroups with clade assignment or not
 if [[ $option = "no" ]]
 then
 	echo "Removing strains assigned clade phylogroup"
 	
 	#Delete clades from phylogeny list
-	sed -i '/^I\b/d' $plots/phylogeny_list.txt 
-	sed -i '/^II\b/d' $plots/phylogeny_list.txt 
-	sed -i '/^III\b/d' $plots/phylogeny_list.txt 
-	sed -i '/^IV\b/d' $plots/phylogeny_list.txt 
-	sed -i '/^V\b/d' $plots/phylogeny_list.txt 
+	#sed -i '/^I\b/d' $plots/phylogeny_list.txt 
+	#sed -i '/^II\b/d' $plots/phylogeny_list.txt 
+	#sed -i '/^III\b/d' $plots/phylogeny_list.txt 
+	#sed -i '/^IV\b/d' $plots/phylogeny_list.txt 
+	#sed -i '/^V\b/d' $plots/phylogeny_list.txt 
 	#Generate new list of genomes to use
-	awk '{print $2}' $plots/phylogeny_list.txt | grep -f - $plots/List.genomes.txt > $plots/new_genome_list.txt
-	
+	#awk '{print $2}' $plots/phylogeny_list.txt | grep -f - $plots/List.genomes.txt > $plots/new_genome_list.txt
+	python3 py/removeCladesFromList.py $plots
 	#Copy new list over the original list
 	cp $plots/new_genome_list.txt $plots/List.genomes.txt
-	
+	cp $plots/new_phylogeny_list.txt $plots/phylogeny_list.txt
 #If not no (so yes) then break and continue.
 else
 	:
@@ -263,6 +265,8 @@ Rscript generatePlot3.r $plots $option $labels
 cp $plots/finalPlot.EMF $plots/finalPlot.$$.EMF
 rm $plots/finalPlot.EMF
 echo "Rscript ran, output finalPlot.$$.EMF should be in $plots directory"
+
+python3 py/rScriptParameters.py $plots $option $labels $working_directory
 
 #Remove the tmp directory, used in step 5 and no longer needed.
 rmdir tmp
