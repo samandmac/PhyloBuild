@@ -2,7 +2,7 @@
 This is a pipeline that can be used to generate a phylogenetic tree of E.coli, including a heatmap showing carriage of specific genes, the assigned phylogroup of each strain, and the names of each strain.
 
 # Usage 
-**bash ecoli_phylogroup_tree.sh [OPTIONAL PARAMETERS]**
+`bash ecoli_phylogroup_tree.sh [OPTIONAL PARAMETERS]`
 
    **[--genes, -s]** : Path to location of genes of interest directory, which should contain the genes of interest. Default is set to your_working_directory/GeneInterest
 
@@ -55,6 +55,8 @@ We generate a number of files in the output, they should be:
    
    **phylogeny_list.txt** (tab-separated file, one column containing assigned phylogroup and the other being the matching genome)
    
+   **newRscript.r** (the R script, but with the args[x] swapped with their actual parameter e.g. file path in the R script, allows user to peruse it at their leisure, and change things if they wish)
+   
    **The plot! As an EMF file. Shows heatmap indicating gene carriage for each strain, highlights genomes that were added in, distinct colours based on group and carriage.**
  
 # Required dependencies (and their associated dependencies)
@@ -82,9 +84,12 @@ We generate a number of files in the output, they should be:
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**stringr**  
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**knitr**  
    
-**PhyML** https://github.com/stephaneguindon/phyml
+**PhyML** https://github.com/stephaneguindon/phyml  
+&nbsp;&nbsp;&nbsp;If on Mac, you'll need to download the binary from the PhyML website, and move the UNZIPPED file to the same working directory as the rest of the script: http://www.atgc-montpellier.fr/phyml/download.php 
+&nbsp;&nbsp;&nbsp;In this case, swap line 254 in ecoli_phylogroup_tree.sh from `phyml -i phylipFor.phy -b 100` to `PhyML-3.1/PhyML-3.1_macOS-MountainLion -i phylipFor.phy -b 100`
 
 **MAFFT** https://mafft.cbrc.jp/alignment/software/source.html
 
 # Example plot generated
-![pic](https://user-images.githubusercontent.com/100131598/165153161-2637c9de-1d17-4e18-b734-ec409baf60ef.jpg)
+![finalPlot jpeg](https://user-images.githubusercontent.com/100131598/167879830-0587c396-07ad-456a-92fa-24dccf75653a.jpg)
+
