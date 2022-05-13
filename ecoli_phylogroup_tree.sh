@@ -38,12 +38,13 @@ for arg in "$@"; do #This just sets it so that you can use the double --xxxx and
     "--output")   set -- "$@" "-m" ;;
     "--clades")   set -- "$@" "-u" ;;
     "--labels")   set -- "$@" "-e" ;;
+    "--rename_genomes")   set -- "$@" "-l" ;;
     *)        set -- "$@" "$arg"
   esac
 done
 
 #This simply takes the arguement from the user and stores that in a variable.
-while getopts "s:a:m:u:e:" opt
+while getopts "s:a:m:u:e:l:" opt
 do
 	case "$opt" in
 		s)
@@ -61,6 +62,9 @@ do
 		e)
 			labels_or_not="${OPTARG}" #added this in too! It lets user decide if labels should be on the plot or not.
 			;;
+		l)
+			rename_genomes="${OPTARG}" #added this in too! Allows user to rename genomes they added in.
+			;;
 	esac
 done
 
@@ -70,14 +74,15 @@ shift $((OPTIND-1))
 #removed Documents directory variable, as script should work from working directory.
 #Made Genomes directory containing genomes for building the tree - these are not user input ones but a template list.
 working_directory=`pwd`
-genomeInterest=${genome_dir:-${working_directory}/GenomeInterest}
-geneInterest=${gene_dir:-${working_directory}/GeneInterest}
-genesForTree=$working_directory/Genes
-genomesForTree=$working_directory/Genomes
+genomeInterest=${genome_dir:-${working_directory}/Genomes}
+geneInterest=${gene_dir:-${working_directory}/Genes}
+genesForTree=$geneInterest/Template_Genes
+genomesForTree=$genomeInterest/Template_Genomes
 plots=${output_dir:-${working_directory}/output}
 blastResults=$working_directory/BlastResults
 option=${clades_or_not:-"no"}
 labels=${labels_or_not:-"no"}
+rename=${rename_genomes:-"no"}
 
 #Making some directories - if they exist already something may have gone wrong with clearing them last time - script may have been ended earlier. 
 mkdir -p $plots
@@ -261,7 +266,7 @@ cp phylipFor.phy_phyml_tree.txt $plots/phylipFor.phy_phyml_tree.txt
 #rm $plots/List.genomes.txt
 
 echo "=============== Step 8: Generating Plot through R ==============="
-Rscript generatePlot3.r $plots $option $labels
+Rscript generatePlot.r $plots $option $labels $rename
 cp $plots/finalPlot.EMF $plots/finalPlot.$$.EMF
 rm $plots/finalPlot.EMF
 echo "Rscript ran, output finalPlot.$$.EMF should be in $plots directory"
