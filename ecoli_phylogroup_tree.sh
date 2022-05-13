@@ -38,12 +38,13 @@ for arg in "$@"; do #This just sets it so that you can use the double --xxxx and
     "--output")   set -- "$@" "-m" ;;
     "--clades")   set -- "$@" "-u" ;;
     "--labels")   set -- "$@" "-e" ;;
+    "--rename_genomes")   set -- "$@" "-l" ;;
     *)        set -- "$@" "$arg"
   esac
 done
 
 #This simply takes the arguement from the user and stores that in a variable.
-while getopts "s:a:m:u:e:" opt
+while getopts "s:a:m:u:e:l:" opt
 do
 	case "$opt" in
 		s)
@@ -61,6 +62,9 @@ do
 		e)
 			labels_or_not="${OPTARG}" #added this in too! It lets user decide if labels should be on the plot or not.
 			;;
+		l)
+			rename_genomes="${OPTARG}" #added this in too! Allows user to rename genomes they added in.
+			;;
 	esac
 done
 
@@ -70,14 +74,15 @@ shift $((OPTIND-1))
 #removed Documents directory variable, as script should work from working directory.
 #Made Genomes directory containing genomes for building the tree - these are not user input ones but a template list.
 working_directory=`pwd`
-genomeInterest=${genome_dir:-${working_directory}/GenomeInterest}
-geneInterest=${gene_dir:-${working_directory}/GeneInterest}
-genesForTree=$working_directory/Genes
-genomesForTree=$working_directory/Genomes
+genomeInterest=${genome_dir:-${working_directory}/Genomes}
+geneInterest=${gene_dir:-${working_directory}/Genes}
+genesForTree=$geneInterest/Template_Genes
+genomesForTree=$genomeInterest/Template_Genomes
 plots=${output_dir:-${working_directory}/output}
 blastResults=$working_directory/BlastResults
 option=${clades_or_not:-"no"}
 labels=${labels_or_not:-"no"}
+rename=${rename_genomes:-"no"}
 
 #Making some directories - if they exist already something may have gone wrong with clearing them last time - script may have been ended earlier. 
 mkdir -p $plots
@@ -100,7 +105,7 @@ cd $genomeInterest
 for filename in *.fa; do 
    mv ${filename} "${filename%#*}"
    mv ${filename%#*} "${filename%#*}.fasta"
-   echo "Changed $filename to \"${filename%#*}\".fasta"
+   echo "Changed $filename to NAME.fasta"
 done
 
 #Change back to original directory
@@ -186,23 +191,25 @@ do
 	echo -e "${phylogroup}\t$x" >> $plots/phylogeny_list.txt
 done
 
+cd $working_directory
+
 #Finally, get the user input to determine whether to remove phylogroups with clade assignment or not
 if [[ $option = "no" ]]
 then
 	echo "Removing strains assigned clade phylogroup"
 	
 	#Delete clades from phylogeny list
-	sed -i '/^I\b/d' $plots/phylogeny_list.txt 
-	sed -i '/^II\b/d' $plots/phylogeny_list.txt 
-	sed -i '/^III\b/d' $plots/phylogeny_list.txt 
-	sed -i '/^IV\b/d' $plots/phylogeny_list.txt 
-	sed -i '/^V\b/d' $plots/phylogeny_list.txt 
+	#sed -i '/^I\b/d' $plots/phylogeny_list.txt 
+	#sed -i '/^II\b/d' $plots/phylogeny_list.txt 
+	#sed -i '/^III\b/d' $plots/phylogeny_list.txt 
+	#sed -i '/^IV\b/d' $plots/phylogeny_list.txt 
+	#sed -i '/^V\b/d' $plots/phylogeny_list.txt 
 	#Generate new list of genomes to use
-	awk '{print $2}' $plots/phylogeny_list.txt | grep -f - $plots/List.genomes.txt > $plots/new_genome_list.txt
-	
+	#awk '{print $2}' $plots/phylogeny_list.txt | grep -f - $plots/List.genomes.txt > $plots/new_genome_list.txt
+	python3 py/removeCladesFromList.py $plots
 	#Copy new list over the original list
 	cp $plots/new_genome_list.txt $plots/List.genomes.txt
-	
+	cp $plots/new_phylogeny_list.txt $plots/phylogeny_list.txt
 #If not no (so yes) then break and continue.
 else
 	:
@@ -259,10 +266,12 @@ cp phylipFor.phy_phyml_tree.txt $plots/phylipFor.phy_phyml_tree.txt
 #rm $plots/List.genomes.txt
 
 echo "=============== Step 8: Generating Plot through R ==============="
-Rscript generatePlot3.r $plots $option $labels
+Rscript generatePlot.r $plots $option $labels $rename
 cp $plots/finalPlot.EMF $plots/finalPlot.$$.EMF
 rm $plots/finalPlot.EMF
 echo "Rscript ran, output finalPlot.$$.EMF should be in $plots directory"
+
+python3 py/rScriptParameters.py $plots $option $labels $working_directory
 
 #Remove the tmp directory, used in step 5 and no longer needed.
 rmdir tmp

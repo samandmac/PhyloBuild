@@ -14,14 +14,14 @@ shift $((OPTIND-1))
 
 #Let's intialise some variables shall we?
 docs=~/Documents
-genesForTree=$docs/Genes
-genomesForTree=$docs/Ecoli/Genomes
+genesForTree=$docs/Genes/Template_Genes
+genomesForTree=$docs/Genomes/Template_Genomes
 plots=$output_dir
 blast=$docs/blast
 
-#Change to place where genomes are stored and make a list of genome file names
-cd $genomesForTree
-ls *.fasta | sed 's/.fasta//g' > $plots/List.genomes.$$.txt
+#Change to place where genomes are stored and make a list of genome file names -FOR SOME REASON NOT WORKING, SO USING THE ORIGINAL ONE MADE IN THE MAIN SCRIPT!
+#cd $genomesForTree
+#ls *.fasta | sed 's/.fasta//g' > $plots/List.genomes.$$.txt
 
 cd $blast
 #Running blast to get some genes which we then use as genes of interest in the main script.
@@ -35,13 +35,13 @@ y=1
 start=$SECONDS
 echo "Beginning to filter genes to those that exist in all genomes!"
 
-for x in `cat $plots/List.genomes.$$.txt`
+for x in `cat $plots/List.genomes.txt`
 do
 
 #MISUNDERSTOOD ORIGINAL PAPER, THEY ONLY KEEP THE QUERY GENE THAT HAS 80% COVERAGE AND 70% IDENTITY, SO WE NEED TO APPEND QUERY FILE TO KEEP ONLY THOSE THAT SHOULD BE KEPT
 	
 	echo "Running through $x to determine orthologs..."
-	#To grab the gene names that appear in the matches
+	#To grab the gene names that appear in the matches -CHANGED TO QCOVS!!!
 	blastn -query geneList$y.txt -subject $genomesForTree/$x.fasta -qcov_hsp_perc 80 -perc_identity 70 -outfmt "6 qseqid" | sed 's/^\(.\{0\}\)/\1>/' | awk '!seen[$0]++'  > blastGene$y.txt
 
 	
@@ -55,7 +55,11 @@ done
 
 file=`ls -v | tail -4 | head -1`
 #Convert gene list header to normal gene identifier
-sed '/>/ s/.*_\([A-Z]\{2\}_[0-9]\+.[0-9]\).*/>\1/g' ${file} > geneList.txt
+#I added in the below line for the NEW genome list.
+#gene=`awk '{ print $2 }' $file | sed 's/^.*=\([Aa-Zz]\+\).*/\1/'`
+sed '/^>/ s/^.*gene=\([Aa-Zz]\+\).*/\1/' ${file} | sed '1~2s/^/>/' > geneList.txt
+#Below is for the old code!
+#sed '/>/ s/.*_\([A-Z]\{2\}_[0-9]\+.[0-9]\).*/>\1/g' ${file} > geneList.txt
 #for only top 10
 head -20 geneList.txt > $genesForTree/geneList.txt
 #mv geneList.txt ~/Documents/Genes/geneList.txt
