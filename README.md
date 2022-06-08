@@ -57,7 +57,7 @@ We generate a number of files in the output, they should be:
    
    **phylogeny_list.txt** (tab-separated file, one column containing assigned phylogroup and the other being the matching genome)
    
-   **newRscript.r** (the R script, but with the args[x] swapped with their actual parameter e.g. file path in the R script, allows user to peruse it at their leisure, and change things if they wish)
+   **newRscript.r** (the R script, but with the args[x] swapped with their actual parameter e.g. file path in the R script, allows user to use Rscript right after running with all data needed - they can adjust the R script as necessary)
    
    **The plot! As an EMF file. Shows heatmap indicating gene carriage for each strain, highlights genomes that were added in, distinct colours based on group and carriage.**  
 
