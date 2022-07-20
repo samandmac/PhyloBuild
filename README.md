@@ -1,8 +1,8 @@
-# Phylo_Tree - Pipeline
+# PhyloTree - Pipeline
 This is a pipeline that can be used to generate a phylogenetic tree of E.coli, including a heatmap showing carriage of specific genes, the assigned phylogroup of each strain, and the names of each strain.
 
 # Usage 
-`bash ecoli_phylogroup_tree.sh [OPTIONAL PARAMETERS]`
+`bash PhyloTree.sh [OPTIONAL PARAMETERS]`
 
    **[--genes, -s]** : Path to location of genes of interest directory, which should contain the genes of interest. Default is set to your_working_directory/Genes
 
@@ -91,7 +91,7 @@ If the user needs to change the names of some of the genomes (for instance, thos
    
 **PhyML** https://github.com/stephaneguindon/phyml  
 &nbsp;&nbsp;&nbsp;If on Mac, you'll need to download the binary from the PhyML website, and move the UNZIPPED file to the same working directory as the rest of the script: http://www.atgc-montpellier.fr/phyml/download.php 
-&nbsp;&nbsp;&nbsp;In this case, swap line 254 in ecoli_phylogroup_tree.sh from `phyml -i phylipFor.phy -b 100` to `PhyML-3.1/PhyML-3.1_macOS-MountainLion -i phylipFor.phy -b 100`
+&nbsp;&nbsp;&nbsp;In this case, swap line 254 in PhyloTree.sh from `phyml -i phylipFor.phy -b 100` to `PhyML-3.1/PhyML-3.1_macOS-MountainLion -i phylipFor.phy -b 100`
 
 **MAFFT** https://mafft.cbrc.jp/alignment/software/source.html
 
