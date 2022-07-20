@@ -246,8 +246,8 @@ cd $working_directory
 
 #Couple of things, the alignment file seems to differ everytime it's made - I suspect that the order of the genes is changed around each time, because the same sequences are there, but it seems to be differenly ordered. This may change the tree slightly each time (indeed, there may be minor differences in trees that are made the same way, but it just seems like the order of branches changes so perhaps not entirely major? Can try to make my own alignment if necessary).
 echo "=============== Step 5: Running alignment ==============="
-#The alignBlast.pl script was graciously provided by Thomas Otto of the University of Glasgow - it was slightly adjusted for our needs but remains largely the same. For more information on what this script does, see step 5 in the introduction of the script. Perl is a language I am unfamiliar with - if stuff goes wrong with this section I'll be unhelpful.
-perl alignBlast.pl BlastResults ALIGNMENTS
+#The align_blast.pl script was graciously provided by Thomas Otto of the University of Glasgow - it was slightly adjusted for our needs but remains largely the same. For more information on what this script does, see step 5 in the introduction of the script. Perl is a language I am unfamiliar with - if stuff goes wrong with this section I'll be unhelpful.
+perl align_blast.pl BlastResults ALIGNMENTS
 find . -name 'ALIGNMENTS.*.fasta' -delete #removes unecessary .fasta files generated from script
 
 #Below is step 6, where we convert the resulting alignment file to a phylip format for tree producing in phyml.
