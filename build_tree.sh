@@ -266,7 +266,7 @@ cp phylipFor.phy_phyml_tree.txt $plots/phylipFor.phy_phyml_tree.txt
 #rm $plots/List.genomes.txt
 
 echo "=============== Step 8: Generating Plot through R ==============="
-Rscript generatePlot.r $plots $option $labels $rename
+Rscript generate_plot.r $plots $option $labels $rename
 cp $plots/finalPlot.EMF $plots/finalPlot.$$.EMF
 rm $plots/finalPlot.EMF
 echo "Rscript ran, output finalPlot.$$.EMF should be in $plots directory"
