@@ -1,0 +1,6 @@
+Example of genesOI.txt - This is where you should be putting the FASTA format of your genes of interest
+
+>geneName1
+GATACA
+>geneName2
+ACATAG
