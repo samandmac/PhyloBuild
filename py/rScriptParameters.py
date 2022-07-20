@@ -17,7 +17,7 @@ working_directory = sys.argv[4]
 
 new_file = open(path+ "/newRscript.r", "w")
 
-for line in open(working_directory+"/generatePlot3.r"): #take file line by line
+for line in open(working_directory+"/generatePlot.r"): #take file line by line
     
     fields = line.rstrip("\n")
     
