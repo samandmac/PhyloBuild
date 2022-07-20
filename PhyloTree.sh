@@ -123,7 +123,7 @@ ls *.fasta | sed 's/.fasta//g' > $plots/genomes.added.txt
 #We also want a txt list of the genes of interest, after making the list of genes we also generate a list of those (see later)
 cd $working_directory
 echo "Making list of genes of interest..."
-sed -n -e '/>/p' $geneInterest/geneOI.txt | sed 's/^.*>//' > $plots/genesOI.txt
+sed -n -e '/>/p' $geneInterest/genesOI.txt | sed 's/^.*>//' > $plots/genesOI.txt
 
 #Change to place where genomes are stored and make a list of genome file names
 cd $genomesForTree
@@ -226,7 +226,7 @@ do
 	blastn -query $genesForTree/geneList.fasta -subject $genomesForTree/$x.fasta -qcov_hsp_perc 80 -perc_identity 70 -outfmt "6 qseqid sseq" | sed 's/^\(.\{0\}\)/\1>/' | tr '\t' '\n' >  $blastResults/$x.fasta 
 	
 	#This is the blastn just to identify which genomes have a match in the genes that are added in by the user.
-	blastn -query $geneInterest/geneOI.txt -subject $genomesForTree/$x.fasta -qcov_hsp_perc 80 -perc_identity 70 -outfmt "6 qseqid" > blastMatch.txt
+	blastn -query $geneInterest/genesOI.txt -subject $genomesForTree/$x.fasta -qcov_hsp_perc 80 -perc_identity 70 -outfmt "6 qseqid" > blastMatch.txt
 	
 	#We then add the genome name in every line of the file, to indicate genome matches, and save this in plot_extras
 	for f in blastMatch.txt
