@@ -21,7 +21,7 @@ This is a pipeline that can be used to generate a phylogenetic tree of E.coli, i
 This is the script where we want to examine the carriage of specific genes of interest over a number of E.coli (strains) genomes.
 To do so, we generate a tree and use this to plot the carriage. The steps of this script are below:
 
-   1. We need a fasta file of the genes of interest and independent files of the genomes of interest. You can put these in the Genes and Genomes directories respectively - not the template file though, those are to make the tree. Ignore symbol names, these might complicate things later.
+   1. We need a fasta file of the genes of interest and independent files of the genomes of interest. You can put these in the Genes and Genomes directories respectively - not the template file though, those are to make the tree. Do not use symbol names in file names or in gene names inside the geneIO file, these might complicate things later.
 		
    2. We have to determine the phylogrouping of each genome that is being queried (and the references), so therefore the script also runs ClermonTyping and the results of which are saved (see output section).
 	
