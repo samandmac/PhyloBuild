@@ -27,7 +27,7 @@ To do so, we generate a tree and use this to plot the carriage. The steps of thi
 	
    3. We run a blastn on each genome (with genes gathered by the ISME method used as queries) to determine which genes are present in the genome and their sequence in the respective genome. The results of this are stored in the BlastResults folder for each genome.
 	
-   4. We also require a list of genes of interest as an input file (concatenate the genes of interest into one single txt file, following a specfific formatting i.e:
+   4. We also require a list of genes of interest as an input file (concatenate the genes of interest into one single txt file, following a specific formatting i.e:
        
         \>geneName  
         ATCTAATTATATACATACATATAT etc.
