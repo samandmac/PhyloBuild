@@ -1,3 +1,14 @@
+[Usage](#usage) 
+
+[Steps in pipeline](#steps-in-pipeline) 
+
+[Output](#output)
+
+[Required dependencies](#required-dependencies-and-their-associated-dependencies) 
+
+[Example plot](#example-plot-generated)
+
+
 # PhyloTree - Pipeline
 This is a pipeline that can be used to generate a phylogenetic tree of E.coli, including a heatmap showing carriage of specific genes, the assigned phylogroup of each strain, and the names of each strain.
 
