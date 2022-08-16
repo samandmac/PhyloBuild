@@ -10,22 +10,23 @@
 
 
 # PhyloTree - Pipeline
-This is a pipeline that can be used to generate a phylogenetic tree of E.coli, including a heatmap showing carriage of specific genes, the assigned phylogroup of each strain, and the names of each strain.
+This is a pipeline that can be used to generate a phylogenetic tree of species of interest, including a heatmap showing carriage of specific genes, the assigned grouping of strains, and the names of each strain. Required for this to run is a list of genome sequences of interest, a list of gene sequences of interest, genomes that can be used to help expand the tree (as template genomes), and a list of genes that can split the species used into groups. Throughout this explanation, we'll refer to *Escherichia coli* (*E.coli*) as an example species with multiple strains that can be used to generate our Phylogenetic tree.
+
 
 # Usage 
 `bash PhyloTree.sh [OPTIONAL PARAMETERS]`
 
-   **[--genes, -s]** : Path to location of genes of interest directory, which should contain the genes of interest. Default is set to your_working_directory/Genes
+   **[--genes, -p]** : Path to location of genes of interest directory, which should contain the genes of interest. Default is set to your working directory, and the file "Genes". E.g. your_working_directory/Genes
 
-   **[--genomes, -a]** : Path to location of genomes of interest directory, which should contain the genomes of interest. Default is set to your_working_directory/Genomes
+   **[--genomes, -h]** : Path to location of genomes of interest directory, which should contain the genomes of interest. Default is set to your working directory, and the file "Genomes". E.g. your_working_directory/Genomes
 
-   **[--output, -m]** : File name after this should indicate the path to the output file. Default is set to your_working_directory/output.
+   **[--output, -y]** : File name after this should indicate the path to the output file. Default is set to your working directory, in a file called "output". E.g. your_working_directory/output.
 
-   **[--clades, -u]** : Indicates whether clades {I,II,III,IV,V,VI} should be included in the plot. "yes" or "no" selections only. Default is "no".
+   **[--clades, -l]** : Indicates whether clades {I,II,III,IV,V,VI} should be included in the plot. "yes" or "no" selections only. Default is "no".
 
-   **[--label, -e]** : Indicates whether the labels should be included in the end plot. Default is set to "no".
+   **[--label, -o]** : Indicates whether the labels should be included in the end plot. Default is set to "no".
    
-   **[--rename_genomes, -l]** : Indicates whether user has "new_names.txt" file in working directory to rename old genomes into new names. Default is "no".
+   **[--rename_genomes, -t]** : Indicates whether user has "new_names.txt" file in working directory to rename old genomes into new names. Default is "no".
 
 # Steps in pipeline
 
