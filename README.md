@@ -10,8 +10,7 @@
 
 
 # PhyloTree - Pipeline
-This is a pipeline that can be used to generate a phylogenetic tree of species of interest, including a heatmap showing carriage of specific genes, the assigned grouping of strains, and the names of each strain. Required for this to run is a list of genome sequences of interest, a list of gene sequences of interest, genomes that can be used to help expand the tree (as template genomes), and a list of genes that can split the species used into groups. Throughout this explanation, we'll refer to *Escherichia coli* (*E.coli*) as an example species with multiple strains that can be used to generate our Phylogenetic tree.
-
+This is a pipeline that can be used to generate a phylogenetic tree of species of interest, including a heatmap showing carriage of specific genes, the assigned grouping of strains, and the names of each strain. Required for this to run is a list of genome sequences of interest, a list of gene sequences of interest, genomes that can be used to help expand the tree (as template genomes), and a list of genes that can split the species used into groups.
 
 # Usage 
 `bash PhyloTree.sh [OPTIONAL PARAMETERS]`
@@ -26,7 +25,7 @@ This is a pipeline that can be used to generate a phylogenetic tree of species o
 
    **[--phylogroup, -o]** : Indicates whether the user has used the PhyloGroup.sh script, which auto-generates a group_list.txt which is used to group *E. coli* strains ONLY. If this parameter is set to "yes", then the grouping parameter is automatically set to "yes", and an output folder is created which contains a list of genomes and a group_list.txt file. Default is "no". 
    
-   **[--grouping, -t]** : This indicates whether the user has a group_list.txt file which contains a grouping factor tab separated from the name of the strain being used. Default is "no". The .txt file should be located in the working directory. 
+   **[--grouping, -t]** : This indicates whether the user has a group_list.txt file which contains a grouping factor tab separated from the name of the strain being used. Default is "no". The .txt file should be located in the working directory. If using PhyloGroup first, a group_list.txt is automatically generated.
 
 # Steps in pipeline
 
@@ -71,7 +70,7 @@ We generate a number of files in the output, they should be:
    
    **The plot! As an EMF file. Shows heatmap indicating gene carriage for each strain, highlights genomes that were added in, distinct colours based on group and carriage.**  
 
-If the user needs to change the names of some of the genomes (for instance, those that were added in) simply make a txt file called new_names.txt and have the old genome names on the left, tab, then the new names on the right. You can place that in the working directory. If required after making the original plot, simply take genomesAdded.txt from the output directory, add new names on the same line after tabbing, and run that part of the script in the newRscript.r output in the output directory.
+If the user needs to change the names of some of the genomes (for instance, those that were added in) simply make a txt file called new_names.txt and have the old genome names on the left, tab, then the new names on the right. You can place that in the working directory. If required after making the original plot, simply take genomesAdded.txt from the output directory, add new names on the same line after tabbing, and run that part of the script in the newRscript.r output in the output directory. 
 
 # Required dependencies (and their associated dependencies)
 **ALTER** https://github.com/sing-group/ALTER  
