@@ -1,0 +1,8 @@
+This is an example file of what sort of files should be present in the Genomes folder (not the Template_Genomes, which contains genomes used to generate the tree).
+In the Genomes folder, you can have separate genome fasta files of nucleotide sequences - keep each separate for the strain, there's no need to concatenate anything here. It will use the file name as the strain name in the plot, so be aware of this - no nonsensical names please.
+Again, FASTA format.
+
+>Strain_name
+ATGCNUCLEOTIDESEQUENCECGTA
+
+If there's multiple ">" because of contigs etc, don't worry this should be fine.

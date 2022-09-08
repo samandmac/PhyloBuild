@@ -27,6 +27,3 @@ for line in open(path + "/phylogeny_list.txt"):
         new_genome_list.write(name + "\n")
     else:
         print("Removed " + name + " as it was designated a clade " + clade + " phylogroup.")
-            
-    
-
