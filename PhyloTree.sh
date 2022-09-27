@@ -3,7 +3,7 @@
 #This is the script where we want to examine the carriage of specific genes of interest over a number of E.coli (strains) genomes.
 #To do so, we generate a tree and use this to plot the carriage. The steps of this script are below:
 
-	#1. We need a fasta file of the genes of interest (we've taken this from 1 strain as a reference) For this, I initially used the Clermont scheme genes (i.e. looked at what genes the primers are supposed to select for, and took those). I switched that to a method similar to the ISME paper, which iteratively looks for genes present in the genomes and only uses those that are kept in the sequences. The intial genes are all those present in a reference strain. HOWEVER, this has presented issues, and grouping looks pretty great with only the Clermont Scheme - separation of groups is good. Therefore, I am making the ISME Method a separate tool (it isn't quite refined yet) and I will continue with the default being that the user provides a list of genes for tree seperation (by groups, species, or strain) in the form of the geneList.txt file which contains the nucleotide sequences of the genes used for separation. This should be based off of biological knowledge, or just genes that are good for separation. 
+	#1. We need a fasta file of the genes of interest (we've taken this from 1 strain as a reference) For this, I initially used the Clermont scheme genes (i.e. looked at what genes the primers are supposed to select for, and took those). I switched that to a method similar to the ISME paper, which iteratively looks for genes present in the genomes and only uses those that are kept in the sequences. The intial genes are all those present in a reference strain. HOWEVER, this has presented issues, and grouping looks pretty great with only the Clermont Scheme - separation of groups is good. Therefore, I am making the ISME Method a separate tool (it isn't quite refined yet) and I will continue with the default being that the user provides a list of genes for tree seperation (by groups, species, or strain) in the form of the geneList.fasta file which contains the nucleotide sequences of the genes used for separation. This should be based off of biological knowledge, or just genes that are good for separation. 
 		
 	#2. We should also know whether the genomes being queried are separated into specific groups, so therefore we should have a group_list.txt in the working directory which contains the group and then (tab separated) the name of the strain. For instance, using PhyloGroup beforehand for E.coli strains allows the generation of a group_list.txt which contains the phylogroup of strains. This is kept for the plotting script, which uses the group_list.txt file to indicate which strains belong to which group. 
 	
@@ -82,10 +82,15 @@ rename=${rename_genomes:-"no"}
 phylogroup=${phylogroup_yn:-"no"}
 grouping=${grouping_yn:-"no"}
 
+#Making some directories - if they exist already something may have gone wrong with clearing them last time - script may have been ended earlier. 
+mkdir -p $plots
+mkdir -p $blastResults
+
 #I also set it so that if you have used PhyloGroup then you must have a group_list.txt, as this was one of the outputs - so if phylogroup is set to "yes" then we automatically set grouping to "yes" as well.
 if [ $phylogroup == "yes" ]
 then
 	grouping="yes"
+	mv $working_directory/List.genomes.txt $plots/List.genomes.txt
 fi
 
 #This checks whether input files are in the correct format or not, if files aren't in FASTA format an error will be returned.
@@ -100,10 +105,6 @@ if [ $exit_status -ne 0 ]; then
 fi
 # continue as usual...
 echo "All is good, end of format check"
-
-#Making some directories - if they exist already something may have gone wrong with clearing them last time - script may have been ended earlier. 
-mkdir -p $plots
-mkdir -p $blastResults
 
 #I also clear the phylogroup txt file everytime the script is run, so that it doesn't get appended each time - just in case it hasn't already been removed
 echo "Removing phylogroup.txt file in $plots - if it exists"
@@ -170,7 +171,7 @@ fi
 cd $working_directory
 
 
-#Below, we are running steps 2 & 3. This is changed to steps 1 & 2 for now. We run a blastn where the geneList.txt file are queries, the genomes are the subject, and use coverage of 80% and identity of 70%. For each genome, this generates a fasta format file where the gene name is given, then the matching sequence in the genome. Finally, we run another blastn - this time using the genes of interest (so those that are added in by the user) as a query, and still the genomes are a subject. In this case, we just grab the gene names of those that have a match in the genome. We then take the lines in the file, add the genome name in the same line as the gene name, then put that file in the plot_extras directory.
+#Below, we are running steps 2 & 3. This is changed to steps 1 & 2 for now. We run a blastn where the geneList.fasta file are queries, the genomes are the subject, and use coverage of 80% and identity of 70%. For each genome, this generates a fasta format file where the gene name is given, then the matching sequence in the genome. Finally, we run another blastn - this time using the genes of interest (so those that are added in by the user) as a query, and still the genomes are a subject. In this case, we just grab the gene names of those that have a match in the genome. We then take the lines in the file, add the genome name in the same line as the gene name, then put that file in the plot_extras directory.
 echo "=============== Steps 1 & 2: blastn for tree, blastn for genes of interest ==============="
 
 cd $working_directory
