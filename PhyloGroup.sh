@@ -186,6 +186,8 @@ do
     rm ${f}.fasta
 done
 cd $working_directory
+
+mv $plots/List.genomes.txt $working_directory/List.genomes.txt
 #Removing temporary file
 rm -r $plots
 
