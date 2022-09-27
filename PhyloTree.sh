@@ -32,18 +32,20 @@ start=$SECONDS
 for arg in "$@"; do #This just sets it so that you can use the double --xxxx and it will convert those to -x.
   shift
   case "$arg" in
-    "--genes") set -- "$@" "-p" ;;
-    "--genomes") set -- "$@" "-h" ;;
+    "--genes_interest") set -- "$@" "-p" ;;
+    "--genomes_interest") set -- "$@" "-h" ;;
     "--output")   set -- "$@" "-y" ;;
     "--rename_genomes")   set -- "$@" "-l" ;;
     "--phylogroup")   set -- "$@" "-o" ;;
     "--grouping")   set -- "$@" "-t" ;;
+    "--tree_genes")   set -- "$@" "-r" ;;
+    "--tree_genomes")   set -- "$@" "-e" ;;
     *)        set -- "$@" "$arg"
   esac
 done
 
 #This simply takes the arguement from the user and stores that in a variable.
-while getopts "p:h:y:l:o:t:" opt
+while getopts "p:h:y:l:o:t:r:" opt
 do
 	case "$opt" in
 		p)
@@ -64,6 +66,12 @@ do
 		t)
 			grouping_yn="${OPTARG}" 
 			;;
+		r)
+			tree_genes="${OPTARG}" 
+			;;
+		e)
+			tree_genomes="${OPTARG}" 
+			;;
 
 	esac
 done
@@ -72,10 +80,10 @@ shift $((OPTIND-1))
 
 #Initialising a few paths as variables, removed Documents directory variable, as script should work from working directory. Made Genomes directory containing genomes for building the tree - these are not user input ones but a template list.
 working_directory=`pwd`
-genomeInterest=${genome_dir:-${working_directory}/Genomes}
-geneInterest=${gene_dir:-${working_directory}/Genes}
-genesForTree=$geneInterest/Template_Genes
-genomesForTree=$genomeInterest/Template_Genomes
+genomeInterest=${genome_dir:-${working_directory}/Genomes_Interest}
+geneInterest=${gene_dir:-${working_directory}/Carriage_Genes}
+genesForTree=${tree_genes:-${working_directory}/Tree_Genes}
+genomesForTree=${tree_genomes:-${working_directory}/Tree_Genomes}
 plots=${output_dir:-${working_directory}/output}
 blastResults=$working_directory/BlastResults
 rename=${rename_genomes:-"no"}
