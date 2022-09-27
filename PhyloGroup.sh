@@ -7,15 +7,17 @@
 for arg in "$@"; do #This just sets it so that you can use the double --xxxx and it will convert those to -x.
   shift
   case "$arg" in
-    "--genes") set -- "$@" "-p" ;;
-    "--genomes") set -- "$@" "-h" ;;
+    "--genes_interest") set -- "$@" "-p" ;;
+    "--genomes_interest") set -- "$@" "-h" ;;
     "--output")   set -- "$@" "-y" ;;
+    "--tree_genes")   set -- "$@" "-l" ;;
+    "--tree_genomes")   set -- "$@" "-o" ;;
     *)        set -- "$@" "$arg"
   esac
 done
 
 #This simply takes the arguement from the user and stores that in a variable.
-while getopts "p:h:y:l:o:t:" opt
+while getopts "p:h:y:l:o:t:r:" opt
 do
 	case "$opt" in
 		p)
@@ -25,25 +27,26 @@ do
 			genome_dir="${OPTARG}" #User can decide genome directory
 			;;
 		y)
-			output_dir="${OPTARG}" #User can decide genome directory
+			output_dir="${OPTARG}" #User can decide output directory
 			;;
-			
+		l)
+			tree_genes="${OPTARG}" 
+			;;
+		o)
+			tree_genomes="${OPTARG}" 
+			;;
+
 	esac
 done
 
 shift $((OPTIND-1))
 
-#Initialising a few paths as variables
-#removed Documents directory variable, as script should work from working directory.
-#Made Genomes directory containing genomes for building the tree - these are not user input ones but a template list.
 working_directory=`pwd`
-genomeInterest=${genome_dir:-${working_directory}/Genomes}
-geneInterest=${gene_dir:-${working_directory}/Genes}
-genesForTree=$geneInterest/Template_Genes
-genomesForTree=$genomeInterest/Template_Genomes
-plots=${output_dir:-${working_directory}/temp}
-output=${output_dir:-${working_directory}/output}
-
+genomeInterest=${genome_dir:-${working_directory}/Genomes_Interest}
+geneInterest=${gene_dir:-${working_directory}/Carriage_Genes}
+genesForTree=${tree_genes:-${working_directory}/Tree_Genes}
+genomesForTree=${tree_genomes:-${working_directory}/Tree_Genomes}
+plots=${output_dir:-${working_directory}/output}
 
 #This checks whether input files are in the correct format or not
 python3 py/CheckFileFormat.py $genomeInterest $geneInterest
@@ -173,9 +176,9 @@ echo "Removing strains assigned clade phylogroup"
 #awk '{print $2}' $plots/phylogeny_list.txt | grep -f - $plots/List.genomes.txt > $plots/new_genome_list.txt
 python3 py/removeCladesFromList.py $working_directory
 #Copy new list over the original list
-cp $working_directory/new_genome_list.txt $output/List.genomes.txt
-cp $working_directory/new_phylogeny_list.txt $working_directory/group_list.txt
-cp $working_directory/group_list.txt $output/group_list.txt
+cp $working_directory/new_genome_list.txt $plots/List.genomes.txt
+cp $working_directory/new_phylogeny_list.txt $plots/group_list.txt
+cp $working_directory/group_list.txt $plots/group_list.txt
 
 
 #Removing the genomes of interest from the default genome list in Genomes
