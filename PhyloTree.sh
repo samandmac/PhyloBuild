@@ -280,17 +280,3 @@ find . -maxdepth 1 -name 'phylipFor*' -delete
 end=$SECONDS
 runtime=$((end - $start))
 mins=$((runtime / 60))
-secs=$((runtime % 60))
-hour=0
-while (( $mins >= 60 ))
-do
-	hour=$((hour+1))
-	mins=$((mins-60))
-done
-
-if (( $hour >= 1 ))
-then
-	echo "Script took ${hour} hour, ${mins} minutes, and ${secs} seconds" 
-else
-	echo "Script took ${mins} minutes and ${secs} seconds" 
-fi
