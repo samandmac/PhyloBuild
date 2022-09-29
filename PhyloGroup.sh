@@ -82,9 +82,9 @@ cd $genomeInterest
 #Side note, this isn't going to affect anything outside of the particular format that some genomes were given in. If the format changes to one more suitable, that's great.
 echo "Converting .fa to .fasta - this may not work if the file is already in .fasta - don't worry in this case. In the future, consider using .fasta from the beginning."
 for filename in *.fa; do 
-   mv "${filename}" "${filename%#*.fa}"
+   mv "${filename}" "${filename%#*.fa}.fasta"
    #filename=${filename%#*}
-   mv ${filename} "${filename%.fa}.fasta"
+   #mv ${filename} "${filename%.fa}.fasta"
    echo "Changed $filename to have .fasta extension"
 done
 
@@ -99,11 +99,6 @@ cp -a $genomeInterest/*.fasta $genomesForTree
 cd $genomeInterest 
 echo "Making list of genomes added in..."
 ls *.fasta | sed 's/.fasta//g' > $plots/genomes.added.txt
-
-#We also want a txt list of the genes of interest, after making the list of genes we also generate a list of those (see later)
-cd $working_directory
-echo "Making list of genes of interest..."
-sed -n -e '/>/p' $geneInterest/genesOI.txt | sed 's/^.*>//' > $plots/genesOI.txt
 
 #Change to place where genomes are stored and make a list of genome file names
 cd $genomesForTree
@@ -178,7 +173,7 @@ python3 py/removeCladesFromList.py $working_directory
 #Copy new list over the original list
 cp $working_directory/new_genome_list.txt $plots/List.genomes.txt
 cp $working_directory/new_phylogeny_list.txt $plots/group_list.txt
-cp $working_directory/group_list.txt $plots/group_list.txt
+cp $plots/group_list.txt $working_directory/group_list.txt
 
 
 #Removing the genomes of interest from the default genome list in Genomes
