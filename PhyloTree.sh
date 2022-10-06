@@ -40,12 +40,13 @@ for arg in "$@"; do #This just sets it so that you can use the double --xxxx and
     "--grouping")   set -- "$@" "-t" ;;
     "--tree_genes")   set -- "$@" "-r" ;;
     "--tree_genomes")   set -- "$@" "-e" ;;
+    "--mac")   set -- "$@" "-m" ;;
     *)        set -- "$@" "$arg"
   esac
 done
 
 #This simply takes the arguement from the user and stores that in a variable.
-while getopts "p:h:y:l:o:t:r:" opt
+while getopts "p:h:y:l:o:t:r:e:m:" opt
 do
 	case "$opt" in
 		p)
@@ -72,6 +73,9 @@ do
 		e)
 			tree_genomes="${OPTARG}" 
 			;;
+		m)
+			mac="${OPTARG}" 
+			;;
 
 	esac
 done
@@ -89,6 +93,7 @@ blastResults=$working_directory/BlastResults
 rename=${rename_genomes:-"no"}
 phylogroup=${phylogroup_yn:-"no"}
 grouping=${grouping_yn:-"no"}
+mac=${mac:-"no"}
 
 #Making some directories - if they exist already something may have gone wrong with clearing them last time - script may have been ended earlier. 
 mkdir -p $plots
@@ -223,7 +228,16 @@ java -jar $working_directory/ALTER/alter-lib/target/ALTER-1.3.4-jar-with-depende
 
 #Step 5, where we run phyml. We use a bootstrap repition of 100.
 echo "=============== Step 5: Producing Phylogenetic Tree ==============="
-phyml -i phylipFor.phy -b 100
+
+if [ $mac == "yes" ]
+then
+	PhyML-3.1/PhyML-3.1_macOS-MountainLion -i phylipFor.phy -b 100
+fi
+
+if [ $mac == "no" ]
+then
+	phyml -i phylipFor.phy -b 100
+fi
 
 #We copy the resulting newick file format tree data into the plot extras for R.
 cp phylipFor.phy_phyml_tree.txt $plots/phylipFor.phy_phyml_tree.txt
@@ -280,3 +294,17 @@ find . -maxdepth 1 -name 'phylipFor*' -delete
 end=$SECONDS
 runtime=$((end - $start))
 mins=$((runtime / 60))
+secs=$((runtime % 60))
+hour=0
+while (( $mins >= 60 ))
+do
+	hour=$((hour+1))
+	mins=$((mins-60))
+done
+
+if (( $hour >= 1 ))
+then
+	echo "Script took ${hour} hour, ${mins} minutes, and ${secs} seconds" 
+else
+	echo "Script took ${mins} minutes and ${secs} seconds" 
+fi
