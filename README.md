@@ -15,9 +15,9 @@ This is a pipeline that can be used to generate a phylogenetic tree of species o
 # Usage 
 `bash PhyloTree.sh [OPTIONAL PARAMETERS]`
 
-   **[--genes, -p]** : Path to location of genes of interest directory, which should contain the genes of interest. Default is set to your working directory, and the file "Genes". E.g. your_working_directory/Genes. Inside this file should be the Template_Genes file, which contains a FASTA format list of genes used to separate strains for the tree 
+   **[--genes_interest, -p]** : Path to location of genes of interest directory, which should contain the genes of interest. Default is set to your working directory, and the file "Genes". E.g. your_working_directory/Genes. Inside this file should be the Template_Genes file, which contains a FASTA format list of genes used to separate strains for the tree 
 
-   **[--genomes, -h]** : Path to location of genomes of interest directory, which should contain the genomes of interest. Default is set to your working directory, and the file "Genomes". E.g. your_working_directory/Genomes. Inside this folder should be a file called Template_Genomes - containing a number of genomes to help tree building - these can be separate from the genomes of interest, which should just be stored in the Genomes file. 
+   **[--genomes_interest, -h]** : Path to location of genomes of interest directory, which should contain the genomes of interest. Default is set to your working directory, and the file "Genomes". E.g. your_working_directory/Genomes. Inside this folder should be a file called Template_Genomes - containing a number of genomes to help tree building - these can be separate from the genomes of interest, which should just be stored in the Genomes file. 
 
    **[--output, -y]** : File name after this should indicate the path to the output file. Default is set to your working directory, in a file called "output". E.g. your_working_directory/output. 
 
@@ -25,7 +25,13 @@ This is a pipeline that can be used to generate a phylogenetic tree of species o
 
    **[--phylogroup, -o]** : Indicates whether the user has used the PhyloGroup.sh script, which auto-generates a group_list.txt which is used to group *E. coli* strains ONLY. If this parameter is set to "yes", then the grouping parameter is automatically set to "yes", and an output folder is created which contains a list of genomes and a group_list.txt file. Default is "no". 
    
-   **[--grouping, -t]** : This indicates whether the user has a group_list.txt file which contains a grouping factor tab separated from the name of the strain being used. Default is "no". The .txt file should be located in the working directory. If using PhyloGroup first, a group_list.txt is automatically generated.
+   **[--grouping, -t]** : This indicates whether the user has a group_list.txt file which contains a grouping factor tab separated from the name of the strain being used. Default is "no". The .txt file should be located in the working directory. If using PhyloGroup first, a group_list.txt is automatically generated.  
+   
+   **[--tree_genes, -r]** : Indicates user directory for genes used to help build the tree. Default is set to working directory, in a filed called Tree_Genes.
+
+   **[--tree_genomes, -e]** : Indicates user directory for genomes used to help build the tree. Default is set to working directory, in a file called Tree_Genomes.
+   
+   **[--mac, -m]** : This indicates whether the user has a mac or not (used for PHYML, check below to see steps for downloading PHYML on MAC). Default is "no".
 
 # Steps in pipeline
 
@@ -100,7 +106,7 @@ If the user needs to change the names of some of the genomes (for instance, thos
    
 **PhyML** https://github.com/stephaneguindon/phyml  
 &nbsp;&nbsp;&nbsp;If on Mac, you'll need to download the binary from the PhyML website, and move the UNZIPPED file to the same working directory as the rest of the script: http://www.atgc-montpellier.fr/phyml/download.php 
-&nbsp;&nbsp;&nbsp;In this case, swap line 254 in PhyloTree.sh from `phyml -i phylipFor.phy -b 100` to `PhyML-3.1/PhyML-3.1_macOS-MountainLion -i phylipFor.phy -b 100`
+&nbsp;&nbsp;&nbsp;If using MAC, ensure "--mac yes" is used in user parameters.
 
 **MAFFT** https://mafft.cbrc.jp/alignment/software/source.html
 
