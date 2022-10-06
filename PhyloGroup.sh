@@ -49,7 +49,7 @@ genomesForTree=${tree_genomes:-${working_directory}/Tree_Genomes}
 plots=${output_dir:-${working_directory}/output}
 
 #This checks whether input files are in the correct format or not
-python3 py/CheckFileFormat.py $genomeInterest $geneInterest
+python3 py/CheckFileFormat.py $genomesForTree $genesForTree $geneInterest $genomeInterest 
 
 exit_status=$?  # store the exit status for later use
 
