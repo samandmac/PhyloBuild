@@ -107,7 +107,7 @@ then
 fi
 
 #This checks whether input files are in the correct format or not, if files aren't in FASTA format an error will be returned.
-python3 py/CheckFileFormat.py $genomeInterest $geneInterest
+python3 py/CheckFileFormat.py $genomesForTree $genesForTree $geneInterest $genomeInterest 
 
 exit_status=$?  # store the exit status for later use
 
