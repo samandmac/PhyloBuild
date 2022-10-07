@@ -192,7 +192,7 @@ if (groups_yn == "yes"){
   #This adds the heatmap onto the plot
   plot_heatmap = gheatmap(tree.plot, heatmap, offset=0, width=0.5, font.size=3, colnames = FALSE)+
     scale_fill_discrete(breaks=geneOrder, 
-                        name="Gene Carriage")
+                        name="Gene Carriage", guide = guide_legend(label.theme = element_text(face = "italic")))
   
   #And finally saving that plot.
   save_plot(plot_heatmap, 1500, 1500, paste(args[1],"/finalPlot.EMF", sep =""))
@@ -213,7 +213,7 @@ if (groups_yn == "no"){
   #This adds the heatmap onto the plot
   plot_heatmap = gheatmap(tree.plot, heatmap, offset=0, width=0.5, font.size=3, colnames = FALSE)+
     scale_fill_discrete(breaks=geneOrder, 
-                        name="Gene Carriage")
+                        name="Gene Carriage", guide = guide_legend(label.theme = element_text(face = "italic")))
   
   #And finally saving that plot.
   save_plot(plot_heatmap, 1500, 1500, paste(args[1],"/finalPlot.EMF", sep =""))
