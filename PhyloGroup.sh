@@ -171,7 +171,7 @@ echo "Removing strains assigned clade phylogroup"
 #awk '{print $2}' $plots/phylogeny_list.txt | grep -f - $plots/List.genomes.txt > $plots/new_genome_list.txt
 python3 py/removeCladesFromList.py $working_directory
 #Copy new list over the original list
-cp $working_directory/new_genome_list.txt $plots/List.genomes.txt
+cp $working_directory/new_genome_list.txt $working_directory/List.genomes.txt
 cp $working_directory/new_phylogeny_list.txt $plots/group_list.txt
 cp $plots/group_list.txt $working_directory/group_list.txt
 
