@@ -231,7 +231,7 @@ echo "=============== Step 5: Producing Phylogenetic Tree ==============="
 
 if [ $mac == "yes" ]
 then
-	PhyML-3.1/PhyML-3.1_macOS-MountainLion -i phylipFor.phy -b 100
+	./PhyML-3.1/PhyML-3.1_macOS-MountainLion -i phylipFor.phy -b 100
 fi
 
 if [ $mac == "no" ]
