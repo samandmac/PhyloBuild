@@ -21,7 +21,7 @@ This is a pipeline that can be used to generate a phylogenetic tree of species o
 
    **[--output, -y]** : File name after this should indicate the path to the output file. Default is set to your working directory, in a file called "output". E.g. your_working_directory/output. 
 
-   **[--rename_genomes, -l]** : Indicates whether user has "new_names.txt" file in working directory to rename old genomes into new names. Default is "no". If used, the file should contain tab separated old names and new names, line by line. 
+   **[--rename_genomes, -l]** : Indicates whether user has "new_genome_names.txt" file in working directory to rename old genomes into new names. Default is "no". If used, the file should contain tab separated old names and new names, line by line. 
 
    **[--phylogroup, -o]** : Indicates whether the user has used the PhyloGroup.sh script, which auto-generates a group_list.txt which is used to group *E. coli* strains ONLY. If this parameter is set to "yes", then the grouping parameter is automatically set to "yes", and an output folder is created which contains a list of genomes and a group_list.txt file. Default is "no". 
    
@@ -32,6 +32,7 @@ This is a pipeline that can be used to generate a phylogenetic tree of species o
    **[--tree_genomes, -e]** : Indicates user directory for genomes used to help build the tree. Default is set to working directory, in a file called Tree_Genomes.
    
    **[--mac, -m]** : This indicates whether the user has a mac or not (used for PHYML, check below to see steps for downloading PHYML on MAC). Default is "no".
+   **[--rename_genes, -g]** : This indicates whether the user has a file called "new_gene_names.txt" in their working directory to rename old gene names into new gene names on the plot. Default is set to "no". Should be a tab separated file, containing the old name, then the new name.
 
 # Steps in pipeline
 
