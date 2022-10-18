@@ -12,6 +12,15 @@
 # PhyloTree - Pipeline
 This is a pipeline that can be used to generate a phylogenetic tree of species of interest, including a heatmap showing carriage of specific genes, the assigned grouping of strains, and the names of each strain. Required for this to run is a list of genome sequences of interest, a list of gene sequences of interest, genomes that can be used to help expand the tree (as template genomes), and a list of genes that can split the species used into groups.
 
+# Prior to PhyloTree.sh
+Some tools may be used before PhyloTree.sh is ran, which will be described here.  
+
+   **PhyloGenes.sh** (allows user to auto-generate geneList.txt file from full genomes in use, and a reference genome)  
+   
+   **PhyloGroup.sh** (allows user to group E.coli strains by their phylogroup, designated by the Clermont Scheme sequences)   
+
+These can be ran simply as `bash Phyloxxxx.sh`, which makes the assumption you are working from the directories as in gitHub default. If you wish to designate some new directory paths, you can input parameters up to "-o" as below.
+
 # Usage 
 `bash PhyloTree.sh [OPTIONAL PARAMETERS]`
 
@@ -20,20 +29,22 @@ This is a pipeline that can be used to generate a phylogenetic tree of species o
    **[--genomes_interest, -h]** : Path to location of genomes of interest directory, which should contain the genomes of interest. Default is set to your working directory, and the file "Genomes". E.g. your_working_directory/Genomes. Inside this folder should be a file called Template_Genomes - containing a number of genomes to help tree building - these can be separate from the genomes of interest, which should just be stored in the Genomes file. 
 
    **[--output, -y]** : File name after this should indicate the path to the output file. Default is set to your working directory, in a file called "output". E.g. your_working_directory/output. 
+ 
+    **[--tree_genes, -l]** : Indicates user directory for genes used to help build the tree. Default is set to working directory, in a filed called Tree_Genes.
 
-   **[--rename_genomes, -l]** : Indicates whether user has "new_genome_names.txt" file in working directory to rename old genomes into new names. Default is "no". If used, the file should contain tab separated old names and new names, line by line. 
-
-   **[--phylogroup, -o]** : Indicates whether the user has used the PhyloGroup.sh script, which auto-generates a group_list.txt which is used to group *E. coli* strains ONLY. If this parameter is set to "yes", then the grouping parameter is automatically set to "yes", and an output folder is created which contains a list of genomes and a group_list.txt file. Default is "no". 
+   **[--tree_genomes, -o]** : Indicates user directory for genomes used to help build the tree. Default is set to working directory, in a file called Tree_Genomes.
    
    **[--grouping, -t]** : This indicates whether the user has a group_list.txt file which contains a grouping factor tab separated from the name of the strain being used. Default is "no". The .txt file should be located in the working directory. If using PhyloGroup first, a group_list.txt is automatically generated.  
    
-   **[--tree_genes, -r]** : Indicates user directory for genes used to help build the tree. Default is set to working directory, in a filed called Tree_Genes.
+   **[--rename_genomes, -r]** : Indicates whether user has "new_genome_names.txt" file in working directory to rename old genomes into new names. Default is "no". If used, the file should contain tab separated old names and new names, line by line. 
 
-   **[--tree_genomes, -e]** : Indicates user directory for genomes used to help build the tree. Default is set to working directory, in a file called Tree_Genomes.
+   **[--phylogroup, -e]** : Indicates whether the user has used the PhyloGroup.sh script, which auto-generates a group_list.txt which is used to group *E. coli* strains ONLY. If this parameter is set to "yes", then the grouping parameter is automatically set to "yes", and an output folder is created which contains a list of genomes and a group_list.txt file. Default is "no".
    
    **[--mac, -m]** : This indicates whether the user has a mac or not (used for PHYML, check below to see steps for downloading PHYML on MAC). Default is "no".  
    
-   **[--rename_genes, -g]** : This indicates whether the user has a file called "new_gene_names.txt" in their working directory to rename old gene names into new gene names on the plot. Default is set to "no". Should be a tab separated file, containing the old name, then the new name. *NOT INCLUDED YET
+   **[--rename_genes, -g]** : This indicates whether the user has a file called "new_gene_names.txt" in their working directory to rename old gene names into new gene names on the plot. Default is set to "no". Should be a tab separated file, containing the old name, then the new name.  
+   
+    **[--phylogenes, -b]** : Indicates whether the user previously utilised the PhyloGenes.sh command, which auto-generates a geneList.txt file in the Tree_Genes folder. Default is set to "no". See instructions for tool in geneList1.txt file in PhyloGenes directory, and below.  
 
 # Steps in pipeline
 
