@@ -17,7 +17,7 @@ for arg in "$@"; do #This just sets it so that you can use the double --xxxx and
 done
 
 #This simply takes the arguement from the user and stores that in a variable.
-while getopts "p:h:y:l:o:t:r:" opt
+while getopts "p:h:y:l:o::" opt
 do
 	case "$opt" in
 		p)
@@ -64,7 +64,6 @@ echo "All is good, end of format check"
 
 #Making some directories - if they exist already something may have gone wrong with clearing them last time - script may have been ended earlier. 
 mkdir -p $plots
-mkdir -p $output
 
 #I also clear the phylogroup txt file everytime the script is run, so that it doesn't get appended each time - just in case it hasn't already been removed
 echo "Removing phylogroup.txt file in $plots - if it exists"
@@ -171,7 +170,7 @@ echo "Removing strains assigned clade phylogroup"
 #awk '{print $2}' $plots/phylogeny_list.txt | grep -f - $plots/List.genomes.txt > $plots/new_genome_list.txt
 python3 py/removeCladesFromList.py $working_directory
 #Copy new list over the original list
-cp $working_directory/new_genome_list.txt $working_directory/List.genomes.txt
+cp $working_directory/new_genome_list.txt $plots/List.genomes.txt
 cp $working_directory/new_phylogeny_list.txt $plots/group_list.txt
 cp $plots/group_list.txt $working_directory/group_list.txt
 
