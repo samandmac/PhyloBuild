@@ -1,0 +1,8 @@
+This file should contain the reference genome's sequences for genes present in said reference genome. For more information, check the gitHub. 
+Typically, this can be downloaded from NCBI. For example, in tests we utilised the reference genome as MG1655 - so we searched for this on NCBI (nucleotide), clicked on the corresponding entry, clicked "Send to", clicked "Gene Features", "FASTA Nucleotide", and then create file. Simply move this file to your PhyloGenes directory, and rename the file to geneList1.txt (very important!!!). 
+
+Typical FASTA Format only please, should be perfectly fine once downloaded and renamed, no other alterations required. 
+
+Will output the geneList.txt file in Tree_Genes. 
+
+ONCE DONE, WILL REQUIRE YOU TO SPECIFY THAT YOU USED PHYLOGENES IN THE PHYLOTREE, I.E. --phylogenes yes
