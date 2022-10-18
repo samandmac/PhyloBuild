@@ -31,7 +31,7 @@ This is a pipeline that can be used to generate a phylogenetic tree of species o
 
    **[--tree_genomes, -e]** : Indicates user directory for genomes used to help build the tree. Default is set to working directory, in a file called Tree_Genomes.
    
-   **[--mac, -m]** : This indicates whether the user has a mac or not (used for PHYML, check below to see steps for downloading PHYML on MAC). Default is "no".
+   **[--mac, -m]** : This indicates whether the user has a mac or not (used for PHYML, check below to see steps for downloading PHYML on MAC). Default is "no".  
    **[--rename_genes, -g]** : This indicates whether the user has a file called "new_gene_names.txt" in their working directory to rename old gene names into new gene names on the plot. Default is set to "no". Should be a tab separated file, containing the old name, then the new name. *NOT INCLUDED YET
 
 # Steps in pipeline
