@@ -35,18 +35,20 @@ for arg in "$@"; do #This just sets it so that you can use the double --xxxx and
     "--genes_interest") set -- "$@" "-p" ;;
     "--genomes_interest") set -- "$@" "-h" ;;
     "--output")   set -- "$@" "-y" ;;
-    "--rename_genomes")   set -- "$@" "-l" ;;
-    "--phylogroup")   set -- "$@" "-o" ;;
+    "--tree_genes")   set -- "$@" "-l" ;;
+    "--tree_genomes")   set -- "$@" "-o" ;;
     "--grouping")   set -- "$@" "-t" ;;
-    "--tree_genes")   set -- "$@" "-r" ;;
-    "--tree_genomes")   set -- "$@" "-e" ;;
+    "--rename_genomes")   set -- "$@" "-r" ;;
+    "--phylogroup")   set -- "$@" "-e" ;;
     "--mac")   set -- "$@" "-m" ;;
+    "--rename_genes")   set -- "$@" "-g" ;;
+    "--phylogenes")   set -- "$@" "-b" ;;
     *)        set -- "$@" "$arg"
   esac
 done
 
 #This simply takes the arguement from the user and stores that in a variable.
-while getopts "p:h:y:l:o:t:r:e:m:" opt
+while getopts "p:h:y:l:o:t:r:e:m:g:b:" opt
 do
 	case "$opt" in
 		p)
@@ -59,22 +61,28 @@ do
 			output_dir="${OPTARG}" #User can decide output directory
 			;;
 		l)
-			rename_genomes="${OPTARG}" #added this in too! Allows user to rename genomes they added in.
+			tree_genes="${OPTARG}" 
 			;;
 		o)
-			phylogroup_yn="${OPTARG}"
+			tree_genomes="${OPTARG}" 
 			;;
 		t)
 			grouping_yn="${OPTARG}" 
 			;;
 		r)
-			tree_genes="${OPTARG}" 
+			rename_genomes="${OPTARG}" #added this in too! Allows user to rename genomes they added in.
 			;;
 		e)
-			tree_genomes="${OPTARG}" 
+			phylogroup_yn="${OPTARG}"
 			;;
 		m)
 			mac="${OPTARG}" 
+			;;
+		g)
+			rename_genes="${OPTARG}" 
+			;;
+		b)
+			phylogenes="${OPTARG}" 
 			;;
 
 	esac
@@ -90,10 +98,12 @@ genesForTree=${tree_genes:-${working_directory}/Tree_Genes}
 genomesForTree=${tree_genomes:-${working_directory}/Tree_Genomes}
 plots=${output_dir:-${working_directory}/output}
 blastResults=$working_directory/BlastResults
-rename=${rename_genomes:-"no"}
+rename_genomes=${rename_genomes:-"no"}
 phylogroup=${phylogroup_yn:-"no"}
 grouping=${grouping_yn:-"no"}
 mac=${mac:-"no"}
+rename_genes=${rename_genes:-"no"}
+phylogenes=${phylogenes:-"no"}
 
 #Making some directories - if they exist already something may have gone wrong with clearing them last time - script may have been ended earlier. 
 mkdir -p $plots
@@ -173,6 +183,7 @@ fi
 #Essentially, we get the sequences for the genes in like the most popular reference E.coli genome. We then run a blastn with these sequences as a query, against the first genome in the list of our genomes of interest. We only keep those sequences for genes that had a match with this sequence, and repeat against the next genome in the list, again keeping only those that have a match. This method repeats until the final genome, after which we transfer the list of gene sequences that had matches for all the tested genomes, and use this to make the tree - it is supposed to help separate out the genomes by their phylogroup.
 #TL:DR - makeGenes.sh gets the genes (from a reference genome) and finds orthologs in all genomes being queried. NOTE: We only use 10 results at the moment to save time.
 #cd $working_directory
+
 #echo "=============== Step 1: Making List of Genes ==============="
 #WARNING, TEMPORARILY REMOVED ISME METHOD BELOW BECAUSE IT DOESN'T SEEM TO BE GREAT SEPARATION, USING geneList.fasta for now which is the CLermont scheme genes.
 #bash $working_directory/blast/makeGenes1.sh -p $plots
@@ -189,24 +200,51 @@ echo "=============== Steps 1 & 2: blastn for tree, blastn for genes of interest
 
 cd $working_directory
 
-#This is the loop where we can run the steps iteratively for each genome.
-for x in `cat $plots/List.genomes.txt`
-do
+#We need to be aware of which geneList file to use
+if [ $phylogenes == "no" ]
+then 
+	for x in `cat $plots/List.genomes.txt`
+	do
 
-	#We run the blastn for the genes to make the tree and save in BlastResults
-	echo "Running blastn on $x to identify gene carriage and sequences for template genes (for the tree)"
-	blastn -query $genesForTree/geneList.fasta -subject $genomesForTree/$x.fasta -qcov_hsp_perc 80 -perc_identity 70 -outfmt "6 qseqid sseq" | sed 's/^\(.\{0\}\)/\1>/' | tr '\t' '\n' >  $blastResults/$x.fasta 
-	
-	#This is the blastn just to identify which genomes have a match in the genes that are added in by the user.
-	blastn -query $geneInterest/genesOI.txt -subject $genomesForTree/$x.fasta -qcov_hsp_perc 80 -perc_identity 70 -outfmt "6 qseqid" > blastMatch.txt
-	
-	#We then add the genome name in every line of the file, to indicate genome matches, and save this in plot_extras
-	for f in blastMatch.txt
-	do 
-		cat blastMatch.txt | sed "s/$/\t$x/" >> $plots/geneMatches.txt 
+			#We run the blastn for the genes to make the tree and save in BlastResults
+		echo "Running blastn on $x to identify gene carriage and sequences for template genes (for the tree)"
+		blastn -query $genesForTree/geneList.fasta -subject $genomesForTree/$x.fasta -qcov_hsp_perc 80 -perc_identity 70 -outfmt "6 qseqid sseq" | sed 's/^\(.\{0\}\)/\1>/' | tr '\t' '\n' >  $blastResults/$x.fasta 
+			
+		#This is the blastn just to identify which genomes have a match in the genes that are added in by the user.
+		blastn -query $geneInterest/genesOI.txt -subject $genomesForTree/$x.fasta -qcov_hsp_perc 80 -perc_identity 70 -outfmt "6 qseqid" > blastMatch.txt
+			
+		#We then add the genome name in every line of the file, to indicate genome matches, and save this in plot_extras
+		for f in blastMatch.txt
+		do 
+			cat blastMatch.txt | sed "s/$/\t$x/" >> $plots/geneMatches.txt 
+		done
+			
 	done
-	
-done
+fi
+
+#This is the loop where we can run the steps iteratively for each genome.
+if [ $phylogenes == "yes" ]
+then 
+	for x in `cat $plots/List.genomes.txt`
+	do
+
+		#We run the blastn for the genes to make the tree and save in BlastResults
+		echo "Running blastn on $x to identify gene carriage and sequences for template genes (for the tree)"
+		blastn -query $genesForTree/geneList.txt -subject $genomesForTree/$x.fasta -qcov_hsp_perc 80 -perc_identity 70 -outfmt "6 qseqid sseq" | sed 's/^\(.\{0\}\)/\1>/' | tr '\t' '\n' >  $blastResults/$x.fasta 
+		
+		#This is the blastn just to identify which genomes have a match in the genes that are added in by the user.
+		blastn -query $geneInterest/genesOI.txt -subject $genomesForTree/$x.fasta -qcov_hsp_perc 80 -perc_identity 70 -outfmt "6 qseqid" > blastMatch.txt
+		
+		#We then add the genome name in every line of the file, to indicate genome matches, and save this in plot_extras
+		for f in blastMatch.txt
+		do 
+			cat blastMatch.txt | sed "s/$/\t$x/" >> $plots/geneMatches.txt 
+		done
+		
+	done
+fi
+
+echo "BLAST has been run over all the genomes."
 
 #Remove blastMatch.txt, no further use for it.
 rm blastMatch.txt
@@ -222,21 +260,24 @@ echo "=============== Step 3: Running alignment ==============="
 perl align_blast.pl BlastResults ALIGNMENTS
 find . -name 'ALIGNMENTS.*.fasta' -delete #removes unecessary .fasta files generated from script
 
+#One slightly annoying thing about this perl script is that concatenation back to the final file for some reason seems to mess with the number of sequences, such that if we ended up using different sequence for the geneList file, then occasionally we get an error which says that the length of sequences differs - which fails the script. Therefore, in addition to the align_blast.pl, I have to run MAFFT on the final concatenated file.
+mafft --auto Final.ALIGNMENTS.aln > Final.Aligned.aln
+
 #Below is step 4, where we convert the resulting alignment file to a phylip format for tree producing in phyml.
 echo "=============== Step 4: Changing .aln format to .phy ==============="
-java -jar $working_directory/ALTER/alter-lib/target/ALTER-1.3.4-jar-with-dependencies.jar -cg -i Final.ALIGNMENTS.aln -ia -io Linux -o phylipFor.phy -of PHYLIP -oo Linux -op PhyML
+java -jar $working_directory/ALTER/alter-lib/target/ALTER-1.3.4-jar-with-dependencies.jar -cg -i Final.Aligned.aln -ia -io Linux -o phylipFor.phy -of PHYLIP -oo Linux -op PhyML
 
 #Step 5, where we run phyml. We use a bootstrap repition of 100.
 echo "=============== Step 5: Producing Phylogenetic Tree ==============="
 
 if [ $mac == "yes" ]
 then
-	./PhyML-3.1/PhyML-3.1_macOS-MountainLion -i phylipFor.phy -b 100
+	./PhyML-3.1/PhyML-3.1_macOS-MountainLion -i phylipFor.phy -b 100 --quiet
 fi
 
 if [ $mac == "no" ]
 then
-	phyml -i phylipFor.phy -b 100
+	phyml -i phylipFor.phy -b 100 --quiet
 fi
 
 #We copy the resulting newick file format tree data into the plot extras for R.
@@ -244,13 +285,13 @@ cp phylipFor.phy_phyml_tree.txt $plots/phylipFor.phy_phyml_tree.txt
 
 #Step 6 is where the R script is used to generate the plot - in case the user uses the same output folder multiple times I've set it so that the name is changed to a unique number each time. The output will also include the R script with the args switched with the user path - so the user can immediately run the same R script after running the script in case they wish to make any adjustments to the script/plot.
 echo "=============== Step 6: Generating Plot through R ==============="
-Rscript generate_plot.r $plots $rename $grouping
+Rscript generate_plot.r $plots $rename_genomes $grouping $rename_genes
 cp $plots/finalPlot.EMF $plots/finalPlot.$$.EMF
 rm $plots/finalPlot.EMF
 echo "Rscript ran, output finalPlot.$$.EMF should be in $plots"
 
 #This is simply the python script which switches args with the user's paths, options, etc.
-python3 py/rScriptParameters.py $plots $rename $working_directory $grouping
+python3 py/rScriptParameters.py $plots $rename_genomes $working_directory $grouping $rename_genes
 
 #Remove the tmp directory, used in step 5 and no longer needed.
 rmdir tmp
@@ -273,18 +314,7 @@ rm -r $blastResults
 echo "Removing ALIGNMENTS.Alignments file (if it exists)."
 rm -r ALIGNMENTS.Alignments
 rm Final.ALIGNMENTS.aln
-
-#And the blast folder (let's say you had less genomes than before, it would still try to use the last file in this script!)
-echo "Removing uncessary files from blast (if needed)"
-cd blast
-for i in * 
-do
-    if ! grep -qxFe "$i" listToKeep.txt #I designate listToKeep.txt as a txt file containing the file names to keep
-    then
-        echo "Deleting: $i"
-        rm "$i"
-    fi
-done
+rm Final.Aligned.aln
 
 cd $working_directory
 #Deleting extra files generated by programs that are no longer necessary.
