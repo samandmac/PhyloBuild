@@ -15,9 +15,9 @@ This is a pipeline that can be used to generate a phylogenetic tree of species o
 # Prior to PhyloTree.sh
 Some tools may be used before PhyloTree.sh is ran, which will be described here.  
 
-   **PhyloGenes.sh** (allows user to auto-generate geneList.txt file from full genomes in use, and a reference genome)  
+   **PhyloGenes.sh** allows user to auto-generate geneList.txt file using the full genomes in use and a reference genomes full set of gene sequences.This can easily be downloaded from NCBI, and the more genomes used the better (around 131 different strains in our tests gives off good separation in the tree).
    
-   **PhyloGroup.sh** (allows user to group E.coli strains by their phylogroup, designated by the Clermont Scheme sequences)   
+   **PhyloGroup.sh** allows user to group E.coli strains by their phylogroup by generating a group_list.txt file, designated by the Clermont Scheme sequences. Although a lot of testing has been performed utilising E.coli datasets, the software is not hard-coded to one particular strain, and this should be considered an extra feature. User can indicate their own grouping scheme for strains simply by making their own group_list.txt file (tab separated, grouping then the strain name).
 
 These can be ran simply as `bash Phyloxxxx.sh`, which makes the assumption you are working from the directories as in gitHub default. If you wish to designate some new directory paths, you can input parameters up to "-o" as below.
 
