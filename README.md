@@ -34,7 +34,7 @@ These can be ran simply as `bash Phyloxxxx.sh`, which makes the assumption you a
 
    **[--tree_genomes, -o]** : Indicates user directory for genomes used to help build the tree. Default is set to working directory, in a file called Tree_Genomes.
    
-   **[--grouping, -t]** : This indicates whether the user has a group_list.txt file which contains a grouping factor tab separated from the name of the strain being used. Default is "no". The .txt file should be located in the working directory. If using PhyloGroup first, a group_list.txt is automatically generated.  
+   **[--grouping, -t]** : This indicates whether the user has a "group_list.txt" file in the working directory which contains a grouping factor tab separated from the name of the strain being used. Default is "no". If using PhyloGroup first, a group_list.txt is automatically generated.  
    
    **[--rename_genomes, -r]** : Indicates whether user has "new_genome_names.txt" file in working directory to rename old genomes into new names. Default is "no". If used, the file should contain tab separated old names and new names, line by line. 
 
@@ -44,7 +44,7 @@ These can be ran simply as `bash Phyloxxxx.sh`, which makes the assumption you a
    
    **[--rename_genes, -g]** : This indicates whether the user has a file called "new_gene_names.txt" in their working directory to rename old gene names into new gene names on the plot. Default is set to "no". Should be a tab separated file, containing the old name, then the new name.  
    
-   **[--phylogenes, -b]** : Indicates whether the user previously utilised the PhyloGenes.sh command, which auto-generates a geneList.txt file in the Tree_Genes folder. Default is set to "no". See instructions for tool in geneList1.txt file in PhyloGenes directory, and below.  
+   **[--phylogenes, -b]** : Indicates whether the user previously utilised the PhyloGenes.sh command, which auto-generates a "geneList.txt" file in the Tree_Genes folder. Default is set to "no". See instructions for tool in geneList1.txt file in PhyloGenes directory, and above.  
 
 # Steps in pipeline
 
