@@ -62,9 +62,16 @@ if (groups_yn == "yes"){
 
 #Because we want phylogroup to become a generic group for indicating strain group, we have to take this out - leave commented out so user can look at script and decide factor level?
 #phylogroup$group = factor(phylogroup$group, levels = c("A", "B1","B2","C","D",
- #                                                      "E","F","G","I","II",
-  #                                                     "III","IV","V",
-   #                                                    "ALB","FER")) #Changing the order of factors
+#                                                      "E","F","G","I","II",
+#                                                     "III","IV","V",
+#                                                    "ALB","FER")) #Changing the order of factors
+
+gene_names = args[4]
+
+if (gene_names == "yes"){
+  new_gene_names = read.table(paste(args[1],"/../new_gene_names.txt", sep = ""), sep = "\t")
+  names(new_gene_names) = c("old_names","new_names")
+}
 
 geneMatches=read.table(paste(args[1],"/geneMatches.txt", sep=""),
                        col.names = c("gene","label"))
@@ -79,16 +86,16 @@ geneMatches$gene = factor(geneMatches$gene, levels = geneOrder)
 genomes_added_in = read.table(paste(args[1],"/genomes.added.txt", sep=""), 
                               col.names = c("genomes"))
 
-renaming = args[2]
+renaming_genomes = args[2]
 
 #This part just finds if the user replied yes or no and gives a difFERent phylogroup list which is used later in a loop.
-if (renaming == "yes") {
+if (renaming_genomes == "yes") {
   #This little bit of script can be used to change names if required. If you do, place the "new_names" file into the output folder.
-  new_names = read.table("new_names.txt",sep = "\t")
-  names(new_names) = c("label","new_names")
+  new_genome_names = read.table(paste(args[1],"../new_genome_names.txt",sep=""),sep = "\t")
+  names(new_genome_names) = c("label","new_names")
   lb = get.tree(tree)$tip.label
   d = data.frame(label = lb, label2=lb)
-  d = merge(d,new_names, by="label", all.x = TRUE)
+  d = merge(d,new_genome_names, by="label", all.x = TRUE)
   for (x in 1:length(d$label)){
     print(x)
     if (is.na(d$new_names[x]) == FALSE){
@@ -128,13 +135,13 @@ if (groups_yn == "yes"){
       subs = subset(geneMatches, gene == gene_name) #subs = subset of geneMatches where the gene matches the gene_name
       subs = distinct(subs) #subs = only distinct subs, so no repeats
       new = full_join(subs, phylogroup, by="label") #new = a join of subs and phylogroup to obtain a dataset containing phylogrouping
-                                                    #and NA's where there is no gene match present.
+      #and NA's where there is no gene match present.
       row.names(new) = new[,2] #Changing the row names to the genome names
       new = new[1] #new = only the column giving the gene name that matched genomes - NA's present if there was no match.
       names(new) = gene_name #changes the column name to gene_name
       datalist[[i]] = new #We add this to the data list that was empty - so for each gene tested for carriage this repeats. Gives a
-                          #column of gene names (in a row for each genome) if there was a match, NA's if there was no match, and 
-                          #saves results in the datalist for use later.
+      #column of gene names (in a row for each genome) if there was a match, NA's if there was no match, and 
+      #saves results in the datalist for use later.
     }
   }
   #Next we combine all the data saved in the datalist into one data table.
@@ -173,50 +180,94 @@ if (groups_yn == "no"){
 
 #This allows us to select the nodes for the genomes added in, for altering the plot!
 merge_of_genomes_added_in = merge(tree.tbl, genomes_added_in, by.x = 4, by.y = 1) #We previously made genomes added in, so we can just
-                                                                                  #merge them by their label name
+#merge them by their label name
 nodes_added_in =unlist(merge_of_genomes_added_in[,3]) #Saving the nodes of the genomes_added_in
 nodes_added_in
 
 if (groups_yn == "yes"){
-  #Below is the script for when pgroup labels aren't required.
-  #Back to making the actual plot now, and saving that.
-  #Added in colour=group to ggtree to change the branch colour to group 
-  tree.plot = ggtree(tree, layout='circular',branch.length = 'none', ladderize = FALSE, aes(colour=group), show.legend=F) %<+% d + #show.legend =F to get rid of line in legend
-    #geom_tiplab(size=3, aes(colour=group), offset=23, data = td_filter(isTip & node %in% nodes_added_in))+ #Changed geom_tiplab to be only the genomes added in
-    #Alternative plot below, highlight branches of genomes added in, and give all the genomes names as tip labels?
-    geom_tiplab(size=3, aes(colour=group, label=label2), offset=18)+ #changed offset to 28 from 26 for Clermont genes
-    geom_hilight(mapping=aes(subset = node %in% nodes_added_in, fill = "red"))+ #Highlights nodes of genomes that were added in
-    scale_color_discrete("Group")+ #This is just another way of getting the legend in order
-    guides(color = guide_legend(override.aes = list(label = "\u25A0", size = 3)))
+  if (gene_names == "no"){
+    #Below is the script for when pgroup labels aren't required.
+    #Back to making the actual plot now, and saving that.
+    #Added in colour=group to ggtree to change the branch colour to group 
+    tree.plot = ggtree(tree, layout='circular',branch.length = 'none', ladderize = FALSE, aes(colour=group), show.legend=F) %<+% d + #show.legend =F to get rid of line in legend
+      #geom_tiplab(size=3, aes(colour=group), offset=23, data = td_filter(isTip & node %in% nodes_added_in))+ #Changed geom_tiplab to be only the genomes added in
+      #Alternative plot below, highlight branches of genomes added in, and give all the genomes names as tip labels?
+      geom_tiplab(size=3, aes(colour=group, label=label2), offset=18)+ #changed offset to 28 from 26 for Clermont genes
+      geom_hilight(mapping=aes(subset = node %in% nodes_added_in, fill = "red"))+ #Highlights nodes of genomes that were added in
+      scale_color_discrete("Group")+ #This is just another way of getting the legend in order
+      guides(color = guide_legend(override.aes = list(label = "\u25A0", size = 3)))
+    
+    #This adds the heatmap onto the plot
+    plot_heatmap = gheatmap(tree.plot, heatmap, offset=0, width=0.5, font.size=3, colnames = FALSE)+
+      scale_fill_discrete(breaks=geneOrder, 
+                          name="Gene Carriage", guide = guide_legend(label.theme = element_text(face = "italic")))
+    
+    #And finally saving that plot.
+    save_plot(plot_heatmap, 1500, 1500, paste(args[1],"/finalPlot.EMF", sep =""))
+  }
   
-  #This adds the heatmap onto the plot
-  plot_heatmap = gheatmap(tree.plot, heatmap, offset=0, width=0.5, font.size=3, colnames = FALSE)+
-    scale_fill_discrete(breaks=geneOrder, 
-                        name="Gene Carriage", guide = guide_legend(label.theme = element_text(face = "italic")))
-  
-  #And finally saving that plot.
-  save_plot(plot_heatmap, 1500, 1500, paste(args[1],"/finalPlot.EMF", sep =""))
+  if (gene_names == "yes"){
+    #Below is the script for when pgroup labels aren't required.
+    #Back to making the actual plot now, and saving that.
+    #Added in colour=group to ggtree to change the branch colour to group 
+    tree.plot = ggtree(tree, layout='circular',branch.length = 'none', ladderize = FALSE, aes(colour=group), show.legend=F) %<+% d + #show.legend =F to get rid of line in legend
+      #geom_tiplab(size=3, aes(colour=group), offset=23, data = td_filter(isTip & node %in% nodes_added_in))+ #Changed geom_tiplab to be only the genomes added in
+      #Alternative plot below, highlight branches of genomes added in, and give all the genomes names as tip labels?
+      geom_tiplab(size=3, aes(colour=group, label=label2), offset=18)+ #changed offset to 28 from 26 for Clermont genes
+      geom_hilight(mapping=aes(subset = node %in% nodes_added_in, fill = "red"))+ #Highlights nodes of genomes that were added in
+      scale_color_discrete("Group")+ #This is just another way of getting the legend in order
+      guides(color = guide_legend(override.aes = list(label = "\u25A0", size = 3)))
+    
+    #This adds the heatmap onto the plot
+    plot_heatmap = gheatmap(tree.plot, heatmap, offset=0, width=0.5, font.size=3, colnames = FALSE)+
+      scale_fill_discrete(breaks=geneOrder, labels = c(new_gene_names$new_names),
+                          name="Gene Carriage", guide = guide_legend(label.theme = element_text(face = "italic")))
+    #And finally saving that plot.
+    save_plot(plot_heatmap, 1500, 1500, paste(args[1],"/finalPlot.EMF", sep =""))
+  }
 }
 
 if (groups_yn == "no"){
-  #Below is the script for when pgroup labels aren't required.
-  #Back to making the actual plot now, and saving that.
-  #Added in colour=group to ggtree to change the branch colour to group 
-  tree.plot = ggtree(tree, layout='circular',branch.length = 'none', ladderize = FALSE, show.legend=F) %<+% d + #show.legend =F to get rid of line in legend
-    #geom_tiplab(size=3, aes(colour=group), offset=23, data = td_filter(isTip & node %in% nodes_added_in))+ #Changed geom_tiplab to be only the genomes added in
-    #Alternative plot below, highlight branches of genomes added in, and give all the genomes names as tip labels?
-    geom_tiplab(size=3, aes(label=label2), offset=18)+ #changed offset to 28 from 26 for Clermont genes
-    geom_hilight(mapping=aes(subset = node %in% nodes_added_in, fill = "red"))+ #Highlights nodes of genomes that were added in
-    scale_color_discrete("Group")+
-    guides(color = guide_legend(override.aes = list(label = "\u25A0", size = 3)))
-  
-  #This adds the heatmap onto the plot
-  plot_heatmap = gheatmap(tree.plot, heatmap, offset=0, width=0.5, font.size=3, colnames = FALSE)+
-    scale_fill_discrete(breaks=geneOrder, 
-                        name="Gene Carriage", guide = guide_legend(label.theme = element_text(face = "italic")))
-  
-  #And finally saving that plot.
-  save_plot(plot_heatmap, 1500, 1500, paste(args[1],"/finalPlot.EMF", sep =""))
+  if (gene_names == "no"){
+    #Below is the script for when pgroup labels aren't required.
+    #Back to making the actual plot now, and saving that.
+    #Added in colour=group to ggtree to change the branch colour to group 
+    tree.plot = ggtree(tree, layout='circular',branch.length = 'none', ladderize = FALSE, show.legend=F) %<+% d + #show.legend =F to get rid of line in legend
+      #geom_tiplab(size=3, aes(colour=group), offset=23, data = td_filter(isTip & node %in% nodes_added_in))+ #Changed geom_tiplab to be only the genomes added in
+      #Alternative plot below, highlight branches of genomes added in, and give all the genomes names as tip labels?
+      geom_tiplab(size=3, aes(label=label2), offset=18)+ #changed offset to 28 from 26 for Clermont genes
+      geom_hilight(mapping=aes(subset = node %in% nodes_added_in, fill = "red"))+ #Highlights nodes of genomes that were added in
+      scale_color_discrete("Group")+
+      guides(color = guide_legend(override.aes = list(label = "\u25A0", size = 3)))
+    
+    #This adds the heatmap onto the plot
+    plot_heatmap = gheatmap(tree.plot, heatmap, offset=0, width=0.5, font.size=3, colnames = FALSE)+
+      scale_fill_discrete(breaks=geneOrder, 
+                          name="Gene Carriage", guide = guide_legend(label.theme = element_text(face = "italic")))
+    
+    #And finally saving that plot.
+    save_plot(plot_heatmap, 1500, 1500, paste(args[1],"/finalPlot.EMF", sep =""))
+  }
+  if (gene_names == "yes"){
+    #Below is the script for when pgroup labels aren't required.
+    #Back to making the actual plot now, and saving that.
+    #Added in colour=group to ggtree to change the branch colour to group 
+    tree.plot = ggtree(tree, layout='circular',branch.length = 'none', ladderize = FALSE, show.legend=F) %<+% d + #show.legend =F to get rid of line in legend
+      #geom_tiplab(size=3, aes(colour=group), offset=23, data = td_filter(isTip & node %in% nodes_added_in))+ #Changed geom_tiplab to be only the genomes added in
+      #Alternative plot below, highlight branches of genomes added in, and give all the genomes names as tip labels?
+      geom_tiplab(size=3, aes(label=label2), offset=18)+ #changed offset to 28 from 26 for Clermont genes
+      geom_hilight(mapping=aes(subset = node %in% nodes_added_in, fill = "red"))+ #Highlights nodes of genomes that were added in
+      scale_color_discrete("Group")+
+      guides(color = guide_legend(override.aes = list(label = "\u25A0", size = 3)))
+    
+    #This adds the heatmap onto the plot
+    plot_heatmap = gheatmap(tree.plot, heatmap, offset=0, width=0.5, font.size=3, colnames = FALSE)+
+      scale_fill_discrete(breaks=geneOrder, labels = c(new_gene_names$new_names),
+                          name="Gene Carriage", guide = guide_legend(label.theme = element_text(face = "italic")))
+    
+    #And finally saving that plot.
+    save_plot(plot_heatmap, 1500, 1500, paste(args[1],"/finalPlot.EMF", sep =""))
+  }
 }
 
 #If using multiple heatmaps (which is possible, so could do it for each gene of interest?) you can
