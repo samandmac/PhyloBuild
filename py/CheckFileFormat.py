@@ -43,7 +43,7 @@ print("Input: Genes of interest are in FASTA format")
 for file in os.listdir(GenomeInterestPath):
     if (file != "Template_Genomes"):
         filepath = GenomeInterestPath + "/" + file 
-        print(filepath)
+        #print(filepath)
         if (is_fasta(filepath) == False):
             sys.exit("Template Genomes are not in FASTA format: see " + file)
 print("Input: Template Genomes are in FASTA format")
@@ -51,7 +51,7 @@ print("Input: Template Genomes are in FASTA format")
 for file in os.listdir(CarriageGenePath):
     if (file != "Template_Genes"):
         filepath = CarriageGenePath +"/" + file 
-        print(filepath)
+        #print(filepath)
         if (is_fasta(filepath) == False):
             sys.exit("Template Genes are not in FASTA format: see " + file)
 print("Input: Template Genes are in FASTA format")
