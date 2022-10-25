@@ -11,9 +11,10 @@ import sys
 #Below is the method for splitting the ID files into the file_name, and what we want to replace the bit that matches it with
 # - the new_name
 path = sys.argv[1]
-rename = sys.argv[2]
+rename_genomes = sys.argv[2]
 working_directory = sys.argv[3]
 grouping = sys.argv[4]
+rename_genes = sys.argv[5]
 
 new_file = open(path+ "/newRscript.r", "w")
 
@@ -25,10 +26,11 @@ for line in open(working_directory+"/generate_plot.r"): #take file line by line
         fields = re.sub("args\[1],\"","\""+ path ,fields)
         
     if re.search("args\[2]", fields):
-        fields = re.sub("args\[2]","\""+ rename +"\"", fields)
+        fields = re.sub("args\[2]","\""+ rename_genomes +"\"", fields)
         
     if re.search("args\[3]", fields):
         fields = re.sub("args\[3]","\""+ grouping +"\"", fields)
-       
+    if re.search("args\[4]", fields):
+    	fields = re.sub("args\[4]","\""+ rename_genes + "\"", fields)
+    	   
     new_file.write(fields + "\n")
-
