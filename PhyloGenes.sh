@@ -22,7 +22,7 @@ echo "===== PhyloGenes will work to determine orthologs in the genomes that can 
 sleep 2
 
 #This simply takes the arguement from the user and stores that in a variable.
-while getopts "p:h:y:l:o:" opt
+while getopts "p:h:y:r:e:" opt
 do
 	case "$opt" in
 		p)
@@ -34,10 +34,10 @@ do
 		y)
 			output_dir="${OPTARG}" #User can decide output directory
 			;;
-		l)
+		r)
 			tree_genes="${OPTARG}" 
 			;;
-		o)
+		e)
 			tree_genomes="${OPTARG}" 
 			;;
 	esac
