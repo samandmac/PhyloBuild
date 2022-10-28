@@ -113,7 +113,7 @@ mkdir -p $blastResults
 if [ $phylogroup == "yes" ]
 then
 	grouping="yes"
-	mv $working_directory/List.genomes.txt $plots/List.genomes.txt
+	cp $working_directory/List.genomes.txt $plots/List.genomes.txt
 fi
 
 #This checks whether input files are in the correct format or not, if files aren't in FASTA format an error will be returned.
@@ -208,7 +208,7 @@ then
 
 			#We run the blastn for the genes to make the tree and save in BlastResults
 		echo "Running blastn on $x to identify gene carriage and sequences for template genes (for the tree)"
-		blastn -query $genesForTree/geneList.fasta -subject $genomesForTree/$x.fasta -qcov_hsp_perc 80 -perc_identity 70 -outfmt "6 qseqid sseq" | sed 's/^\(.\{0\}\)/\1>/' | tr '\t' '\n' >  $blastResults/$x.fasta 
+		blastn -query $genesForTree/geneList.fasta -subject $genomesForTree/$x.fasta -qcov_hsp_perc 80 -perc_identity 70 -outfmt "6 qseqid sseq pident" | sed 's/^\(.\{0\}\)/\1>/' | tr '\t' '\n' >  $blastResults/$x.fasta 
 			
 		#This is the blastn just to identify which genomes have a match in the genes that are added in by the user.
 		blastn -query $geneInterest/genesOI.txt -subject $genomesForTree/$x.fasta -qcov_hsp_perc 80 -perc_identity 70 -outfmt "6 qseqid" > blastMatch.txt
@@ -217,10 +217,13 @@ then
 		for f in blastMatch.txt
 		do 
 			cat blastMatch.txt | sed "s/$/\t$x/" >> $plots/geneMatches.txt 
-		done
-			
+		done	
 	done
+	python3 py/blast_formatting.py $blastResults
 fi
+
+#This is a new addition, because we often get multiple matches for one gene, I put a restriction on this. Essentially, if there are multiple gene matches for one gene in the tree - then the lowest match gets kept. For now. Will further test performance with this criteria
+
 
 #This is the loop where we can run the steps iteratively for each genome.
 if [ $phylogenes == "yes" ]
@@ -230,7 +233,7 @@ then
 
 		#We run the blastn for the genes to make the tree and save in BlastResults
 		echo "Running blastn on $x to identify gene carriage and sequences for template genes (for the tree)"
-		blastn -query $genesForTree/geneList.txt -subject $genomesForTree/$x.fasta -qcov_hsp_perc 80 -perc_identity 70 -outfmt "6 qseqid sseq" | sed 's/^\(.\{0\}\)/\1>/' | tr '\t' '\n' >  $blastResults/$x.fasta 
+		blastn -query $genesForTree/geneList.txt -subject $genomesForTree/$x.fasta -qcov_hsp_perc 80 -perc_identity 70 -outfmt "6 qseqid sseq pident" | sed 's/^\(.\{0\}\)/\1>/' | tr '\t' '\n' >  $blastResults/$x.fasta 
 		
 		#This is the blastn just to identify which genomes have a match in the genes that are added in by the user.
 		blastn -query $geneInterest/genesOI.txt -subject $genomesForTree/$x.fasta -qcov_hsp_perc 80 -perc_identity 70 -outfmt "6 qseqid" > blastMatch.txt
@@ -239,15 +242,25 @@ then
 		for f in blastMatch.txt
 		do 
 			cat blastMatch.txt | sed "s/$/\t$x/" >> $plots/geneMatches.txt 
-		done
-		
+		done	
 	done
+	python3 py/blast_formatting.py $blastResults
 fi
+
+cd $blastResults
+shopt -s extglob
+rm !(new*.fasta)
+cd $working_directory
+
+for filename in $blastResults/*.fasta
+do
+	mv "$filename" "${filename//new_/}"
+done
 
 echo "BLAST has been run over all the genomes."
 
 #Remove blastMatch.txt, no further use for it.
-rm blastMatch.txt
+#rm blastMatch.txt
 
 cd $working_directory
 
@@ -261,11 +274,12 @@ perl align_blast.pl BlastResults ALIGNMENTS
 find . -name 'ALIGNMENTS.*.fasta' -delete #removes unecessary .fasta files generated from script
 
 #One slightly annoying thing about this perl script is that concatenation back to the final file for some reason seems to mess with the number of sequences, such that if we ended up using different sequence for the geneList file, then occasionally we get an error which says that the length of sequences differs - which fails the script. Therefore, in addition to the align_blast.pl, I have to run MAFFT on the final concatenated file.
-mafft --auto Final.ALIGNMENTS.aln > Final.Aligned.aln
+#mafft --auto Final.ALIGNMENTS.aln > Final.Aligned.aln
 
+#REMEMBER TO SWITCH BACK TO Final.Aligned.aln IF SWITCHING BACK TO ABOVE VERSION 
 #Below is step 4, where we convert the resulting alignment file to a phylip format for tree producing in phyml.
 echo "=============== Step 4: Changing .aln format to .phy ==============="
-java -jar $working_directory/ALTER/alter-lib/target/ALTER-1.3.4-jar-with-dependencies.jar -cg -i Final.Aligned.aln -ia -io Linux -o phylipFor.phy -of PHYLIP -oo Linux -op PhyML
+java -jar $working_directory/ALTER/alter-lib/target/ALTER-1.3.4-jar-with-dependencies.jar -cg -i Final.ALIGNMENTS.aln -ia -io Linux -o phylipFor.phy -of PHYLIP -oo Linux -op PhyML
 
 #Step 5, where we run phyml. We use a bootstrap repition of 100.
 echo "=============== Step 5: Producing Phylogenetic Tree ==============="
@@ -308,6 +322,7 @@ cd $working_directory
 
 #Clear the blast results directory
 echo "Clearing Blast Result directory in case of changes to gene numbers"
+
 rm -r $blastResults
 
 #Clear the alignments file (should stay constant but in case of updates old genes used will still show up without this)
