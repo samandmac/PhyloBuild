@@ -124,5 +124,5 @@ If the user needs to change the names of some of the genomes (for instance, thos
 **MAFFT** https://mafft.cbrc.jp/alignment/software/source.html
 
 # Example plot generated
-![finalPlot jpeg](https://user-images.githubusercontent.com/100131598/167879830-0587c396-07ad-456a-92fa-24dccf75653a.jpg)
+![finalPlot](https://user-images.githubusercontent.com/100131598/199327999-0e6ba88a-a502-4ada-ac83-a64e69d39491.jpg)
 
