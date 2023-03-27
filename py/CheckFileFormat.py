@@ -14,8 +14,10 @@ import sys
 #This allows user inputted genome and gene directories.
 TreeGenomePath = sys.argv[1]
 TreeGenePath = sys.argv[2]
-CarriageGenePath = sys.argv[2]
-GenomeInterestPath = sys.argv[2]
+CarriageGenePath = sys.argv[3]
+GenomeInterestPath = sys.argv[4]
+genes_oi = sys.argv[5]
+genomes_oi = sys.argv[6]
 
 #Function for determining whether a file is FASTA format or not
 def is_fasta(filename):
@@ -24,6 +26,7 @@ def is_fasta(filename):
         return any(fasta) # False when fasta is empty - i.e. wasn't a fasta file
 
 #Checks each directory containing user input - Genomes, genes, template genomes, and template genes.
+
 for file in os.listdir(TreeGenomePath):
     if (file != "Tree_Genomes"):
         filepath = TreeGenomePath + "/" + file 
@@ -39,22 +42,24 @@ for file in os.listdir(TreeGenePath):
         if (is_fasta(filepath) == False):
             sys.exit("Genes of interest not in FASTA format: see: " + filepath)
 print("Input: Genes of interest are in FASTA format")
-            
-for file in os.listdir(GenomeInterestPath):
-    if (file != "Template_Genomes"):
-        filepath = GenomeInterestPath + "/" + file 
-        #print(filepath)
-        if (is_fasta(filepath) == False):
-            sys.exit("Template Genomes are not in FASTA format: see " + file)
-print("Input: Template Genomes are in FASTA format")
-                
-for file in os.listdir(CarriageGenePath):
-    if (file != "Template_Genes"):
-        filepath = CarriageGenePath +"/" + file 
-        #print(filepath)
-        if (is_fasta(filepath) == False):
-            sys.exit("Template Genes are not in FASTA format: see " + file)
-print("Input: Template Genes are in FASTA format")
+
+if [genomes_oi == "yes"]:
+    for file in os.listdir(GenomeInterestPath):
+        if (file != "Template_Genomes"):
+            filepath = GenomeInterestPath + "/" + file 
+            #print(filepath)
+            if (is_fasta(filepath) == False):
+                sys.exit("Template Genomes are not in FASTA format: see " + file)
+    print("Input: Template Genomes are in FASTA format")
+
+if [genes_oi == "yes"]:
+    for file in os.listdir(CarriageGenePath):
+        if (file != "Template_Genes"):
+            filepath = CarriageGenePath +"/" + file 
+            #print(filepath)
+            if (is_fasta(filepath) == False):
+                sys.exit("Template Genes are not in FASTA format: see " + file)
+    print("Input: Template Genes are in FASTA format")
 
 
 # In[ ]:
