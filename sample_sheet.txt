@@ -1,0 +1,2 @@
+strain	name_for_plot	group	of_interest
+327_20_F	NA	G	no	
