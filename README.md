@@ -10,68 +10,72 @@
 
 
 # PhyloTree - Pipeline
-This is a pipeline that can be used to generate a phylogenetic tree of species of interest, including a heatmap showing carriage of specific genes, the assigned grouping of strains, and the names of each strain. Required for this to run is a list of genome sequences of interest, a list of gene sequences of interest, genomes that can be used to help expand the tree (as template genomes), and a list of genes that can split the species used into groups.
+Included in this software are a number of scripts that can be used to generate a phylogenetic tree of particular genomes/strains, investigate carriage of specific genes of interest in genomes/strains, or use the software to visualise a tree previously obtained through PhyloTree or other means. A number of different parameters allow for user customisation of options for their run, and with visualisation. These are further explained below.
 
 # Prior to PhyloTree.sh
 Some tools may be used before PhyloTree.sh is ran, which will be described here.  
 
-   **PhyloGenes.sh** allows user to auto-generate geneList.txt file using the full genomes in use and a reference genomes full set of gene sequences.This can easily be downloaded from NCBI, and the more genomes used the better (around 131 different strains in our tests gives off good separation in the tree).
+   **PhyloGenes.sh** allows user to auto-generate a "rough-and-ready" geneList.txt file (which is used to split the genomes/strains on the tree by their evolutionary similarity) containing orthologs present in all genomes/strains used. By inputting a reference genome full set of gene sequences. This can easily be downloaded from NCBI, although a caveat of this step is that the more genomes used the better (around 131 different strains in our tests gives off good separation in the tree) - as some orthologs may have little variation in fewer genomes/strains. Alternatively, the user can collect their own orthologs or genes known to be present in a subset of the species to split the genomes/strains by their evolutionary similarity.
    
-   **PhyloGroup.sh** allows user to group E.coli strains by their phylogroup by generating a group_list.txt file, designated by the Clermont Scheme sequences. Although a lot of testing has been performed utilising E.coli datasets, the software is not hard-coded to one particular species, and this should be considered an extra feature. User can indicate their own grouping scheme for strains simply by making their own group_list.txt file (tab separated, grouping then the strain name).
+   **PhyloGroup.sh** allows the user to group E.coli strains by their phylogroup by generating a group_list.txt file (this is simply used to colour genome/strain names on the final plot, and is run optionally), designated through the Clermont Scheme sequences. Although a lot of testing has been performed utilising E.coli datasets, the software is not hard-coded to one particular species, and this should be considered an extra feature. User can indicate their own grouping scheme for strains simply by making their own group_list.txt file (tab separated, grouping then the strain name).
 
-These can be ran simply as `bash Phyloxxxx.sh`, which makes the assumption you are working from the directories as in gitHub default. If you wish to designate some new directory paths, you can input parameters up to "-o" as below.
+These can be ran simply as `bash Phyloxxxx.sh`, which makes the assumption you are working from the working directory containing the files as in the gitHub default. The scripts do have default parameter options, so do ensure that you make sure you are selecting the parameters specific to what you want to happen in the run.
 
 # Usage 
 `bash PhyloTree.sh [OPTIONAL PARAMETERS]`
 
-   **[--genes_interest, -p]** : Path to location of genes of interest directory, which should contain the genes of interest. Default is set to your working directory, and the file "Genes". E.g. your_working_directory/Genes. Inside this file should be the Template_Genes file, which contains a FASTA format list of genes used to separate strains for the tree 
+   **[--genes_interest, -a]** : Path to location of genes of interest directory, which should contain the genes of interest. Default is set to your working directory, and the file "Genes". E.g. your_working_directory/Genes. Inside this file should be the Template_Genes file, which contains a FASTA format list of genes used to separate strains for the tree 
 
-   **[--genomes_interest, -h]** : Path to location of genomes of interest directory, which should contain the genomes of interest. Default is set to your working directory, and the file "Genomes". E.g. your_working_directory/Genomes. Inside this folder should be a file called Template_Genomes - containing a number of genomes to help tree building - these can be separate from the genomes of interest, which should just be stored in the Genomes file. 
+   **[--genomes_interest, -b]** : Path to location of genomes of interest directory, which should contain the genomes of interest. Default is set to your working directory, and the file "Genomes". E.g. your_working_directory/Genomes. Inside this folder should be a file called Template_Genomes - containing a number of genomes to help tree building - these can be separate from the genomes of interest, which should just be stored in the Genomes file. 
 
-   **[--output, -y]** : File name after this should indicate the path to the output file. Default is set to your working directory, in a file called "output". E.g. your_working_directory/output. 
+   **[--output, -c]** : File name after this should indicate the path to the output file. Default is set to your working directory, in a file called "output". E.g. your_working_directory/output. 
  
-   **[--tree_genes, -l]** : Indicates user directory for genes used to help build the tree. Default is set to working directory, in a filed called Tree_Genes.
+   **[--tree_genes, -d]** : Indicates user directory for genes used to help build the tree. Default is set to working directory, in a filed called Tree_Genes.
 
-   **[--tree_genomes, -o]** : Indicates user directory for genomes used to help build the tree. Default is set to working directory, in a file called Tree_Genomes.
+   **[--tree_genomes, -e]** : Indicates user directory for genomes used to help build the tree. Default is set to working directory, in a file called Tree_Genomes.
    
-   **[--grouping, -t]** : This indicates whether the user has a "group_list.txt" file in the working directory which contains a grouping factor tab separated from the name of the strain being used. Default is "no". If using PhyloGroup first, a group_list.txt is automatically generated.  
+   **[--grouping, -f]** : This indicates whether the user has a "group_list.txt" file in the working directory which contains a grouping factor tab separated from the name of the strain being used. Default is "no". If using PhyloGroup first, a group_list.txt is automatically generated.  
    
-   **[--rename_genomes, -r]** : Indicates whether user has "new_genome_names.txt" file in working directory to rename old genomes into new names. Default is "no". If used, the file should contain tab separated old names and new names, line by line. 
+   **[--rename_genomes, -g]** : Indicates whether user has "new_genome_names.txt" file in working directory to rename old genomes into new names. Default is "no". If used, the file should contain tab separated old names and new names, line by line. 
 
-   **[--phylogroup, -e]** : Indicates whether the user has used the PhyloGroup.sh script, which auto-generates a group_list.txt which is used to group *E. coli* strains ONLY. If this parameter is set to "yes", then the grouping parameter is automatically set to "yes", and an output folder is created which contains a list of genomes and a group_list.txt file. Default is "no".
+   **[--phylogroup, -h]** : Indicates whether the user has used the PhyloGroup.sh script, which auto-generates a group_list.txt which is used to group *E. coli* strains ONLY. If this parameter is set to "yes", then the grouping parameter is automatically set to "yes", and an output folder is created which contains a list of genomes and a group_list.txt file. Default is "no".
    
-   **[--mac, -m]** : This indicates whether the user has a mac or not (used for PHYML, check below to see steps for downloading PHYML on MAC). Default is "no".  
+   **[--mac, -i]** : This indicates whether the user has a mac or not (used for PHYML, check below to see steps for downloading PHYML on MAC). Default is "no".  
    
-   **[--rename_genes, -g]** : This indicates whether the user has a file called "new_gene_names.txt" in their working directory to rename old gene names into new gene names on the plot. Default is set to "no". Should be a tab separated file, containing the old name, then the new name.  
+   **[--rename_genes, -j]** : This indicates whether the user has a file called "new_gene_names.txt" in their working directory to rename old gene names into new gene names on the plot. Default is set to "no". Should be a tab separated file, containing the old name, then the new name.  
    
-   **[--phylogenes, -b]** : Indicates whether the user previously utilised the PhyloGenes.sh command, which auto-generates a "geneList.txt" file in the Tree_Genes folder. Default is set to "no". See instructions for tool in geneList1.txt file in PhyloGenes directory, and above.  
+   **[--phylogenes, -k]** : Indicates whether the user previously utilised the PhyloGenes.sh command, which auto-generates a "geneList.txt" file in the Tree_Genes folder. Default is set to "no". See instructions for tool in geneList1.txt file in PhyloGenes directory, and above.  
+   
+   **[--genomes_oi, -l]** : Indicates whether the user has genomes of interest, these should be located in the Genomes_Interest folder and will be run alongside the other genomes that are not considered of interest but are used to help with populating the tree. Default is set to "no".  
+   
+   **[--genes_oi, -m]** : Indicates whether the user has genes of interest, these should be located in the Carriage_Genes folder and so the genomes used will be subjected to a blastn to determine which genes are carried in which genomes - this will generate a geneMatches.txt file int he output directory. Default is set to "no".  
+   
+   **[--sample_sheet, -n]** : Indicates whether the user has already generated a sample sheet that contains information pertaining to the visualisation step. Should this be set to "no" and the tree is generated, the sample sheet will be automatically generated to indicate parameters chosen by the user. Default is set to "no".  
+   
+   **[--run_phyloplot, -o]** : Indicates whether the user wants to run the visualisation step after generating a tree or not. Default is set to "no".  
 
+   **[--viral_strains, -p]** : Indicates whether the user is using viral strains or not, if they are then the parameters for the blastn are slightly altered due to the smaller size in viral genomes. Default is set to "no".
+   
+   **[--make_tree, -q]** : Indicates whether the user wants to actually make a tree or not, if this is set to "no" and genes_oi is set to "yes" then the process will continue up to checking for gene carriage and then quit. Default is set to "yes".  
+   
 # Steps in pipeline
 
-This is the script where we want to examine the carriage of specific genes of interest over a number of E.coli (strains) genomes.
-To do so, we generate a tree and use this to plot the carriage. The steps of this script are below:
+We could use PhyloTree.sh to generate a tree and use this to plot the carriage. The typical steps of this script are below, but of course depend on what parameters the user has chosen:
 
-   1. We need a fasta file of the genes of interest and independent files of the genomes of interest. You can put these in the Genes and Genomes directories respectively - not the template file though, those are to make the tree. Do not use symbol names in file names or in gene names inside the geneIO file, these might complicate things later.
+   1. We need a fasta file containing sequences of genes that will be used to separate the tree by evolutionary similarity, and we need a number of different fasta files of genomes/strains that we can use for the tree. Optionally, we could also include a fasta file containing the gene sequences for investigating carriage, and also populate the Genomes_Interest folder with genomes/strains that we are specifically interested in highlighting.
 	
-   2. We run a blastn on each genome (with genes gathered by the ISME method used as queries) to determine which genes are present in the genome and their sequence in the respective genome. The results of this are stored in the BlastResults folder for each genome.
+   2. We run a blastn on each genome using the genes to split the tree, and optionally to determine which genes are carried in the genomes/strains, and extract their sequence in each respective genome. The results of this are stored in the BlastResults folder for each genome, which is deleted after the run is over.
 	
-   3. We also require a list of genes of interest as an input file (concatenate the genes of interest into one single txt file, following a specific formatting i.e:
-       
-        \>geneName  
-        ATCTAATTATATACATACATATAT etc.
-   
-      Stick to uncomplicated gene names (no symbols). On this, we will run a blastn to find genomes that have a match to the genes of interest in the list to identify carriage in the tree plot, and then save the list containing both the name of the genes and which genomes have matched with them. The result is a list of genes (per genome) that have been matched to the specific genome. This is saved as a specific output (see output section).
+   3. We wish to perform alignment on the blastn results for each extracted sequence. Essentially we put all the results from the blastn into one file per gene type, so if a gene is present in the genome file, it gets added to one file of that specific gene type, and then in the next genome if that gene is present the sequence is added to the same file - and so on for each gene in each genome. Essentially, you get a file for each gene and it contains the gene sequences from each genome that had a match. These are saved in the working directory, while they then undergo MAFFT alignment, which generates the files in the FINALTEST.Alignments folder (or whatever you decide to name the directory in the arguments for the perl script) which are, as the name suggests, the aligned gene sequences (of each genome match) for each gene. After this step, all the alignments for all the genes are added to the same file: Final.FINALTEST.aln. This generates a concatenated file of the alignments.
 	
-   4. We wish to perform alignment on the blastn results. I use a PERL script for this. Essentially we put all the results from the blastn (from step 3, step 4 blastn is finished and does not used get further except for the R plot) into one file per gene type, so if a gene is present in the genome file, it gets added to one file of that specific gene type, and then in the next genome if that gene is present the sequence is added to the same file - and so on for each gene in each genome. Essentially, you get a file for each gene and it contains the gene sequences from each genome that had a match. These are saved in the working directory, while they then undergo MAFFT alignment, which generates the files in the FINALTEST.Alignments folder (or whatever you decide to name the directory in the arguments for the perl script) which are, as the name suggests, the aligned gene sequences (of each genome match) for each gene. After this step, all the alignments for all the genes are added to the same file: Final.FINALTEST.aln. This generates a concatenated file of the alignments.
-	
-   5. This generates a concatenated file of the alignments, which is great but we aren't done yet. We need to make the tree with PhyML, however we cannot use a .aln file to generate this. So, we need to convert it to a phylip file format, using ALTER. This simply generates a .phy file, which I've designated phylipfor.phy (inventive, I know).
+   5. This generates a concatenated file of the alignments, which is great but we aren't done yet. We need to make the tree with PhyML, however we cannot use a .aln file to generate this. So, we need to convert it to a phylip file format, using ALTER. This simply generates a .phy file, which I've designated phylipfor.phy.
 	
    6. Once we have a .phy file, we can generate a tree using phyml. This generates a whole bunch of files, but the important one is saved to the output folder (it's the one needed for R plots).
 	
-   7. Once that's done, we run the R script and generate a plot. Hooray! 
+   7. Once that's done, we can run the R script and generate a plot. 
 
 # Output
-We generate a number of files in the output, they should be:
+We generate a number of files in the output, they could be:
    
    **geneMatches.txt** (a tab separated file where one column is genes of interest and the other is genomes that had a match to those genes)
   
@@ -79,17 +83,21 @@ We generate a number of files in the output, they should be:
    
    **genomesAdded.txt** (a column containing the genomes of interest that were added by the user)
    
-   **List.genomes.txt** (a column of the entire list of genomes used in the analysis - will be adjusted if the clades are removed or not)
+   **ListGenomes.txt** (a column of the entire list of genomes used in the analysis - will be adjusted if the clades are removed or not)
    
-   **phylipFor.phy_phyml_tree.txt** (the Newick file format containing the tree information, used in R to produce the tree)
+   **TreeDataFile.txt** (the Newick file format containing the tree information, used in R to produce the tree)
    
    **phylogeny_list.txt** (tab-separated file, one column containing assigned phylogroup and the other being the matching genome)
    
    **newRscript.r** (the R script, but with the args[x] swapped with their actual parameter e.g. file path in the R script, allows user to use Rscript right after running with all data needed - they can adjust the R script as necessary)
    
    **The plot! As an EMF file. Shows heatmap indicating gene carriage for each strain, highlights genomes that were added in, distinct colours based on group and carriage.**  
+   
+   **A heatmap showing carriage only, in the strains that you specified as of interest (so not every single strain, unless they are located in the Genomes_Interest folder and you specified that this was a parameter), not including a tree. As an EMF file.**  
+   
+   **A tab-separated .txt file called sample_sheet.txt in your working directory, that will contain the information designated by the parameters specified by the user for the visualisation step - this is automatically generated once PhyloTree.sh is run, unless the user has created their own sample sheet and specified this in the parameters.**  
 
-If the user needs to change the names of some of the genomes (for instance, those that were added in) simply make a txt file called new_names.txt and have the old genome names on the left, tab, then the new names on the right. You can place that in the working directory. If required after making the original plot, simply take genomesAdded.txt from the output directory, add new names on the same line after tabbing, and run that part of the script in the newRscript.r output in the output directory. 
+If the user needs to change the names of some of the (carriage) genes or genomes, simply make a txt file called new_gene_names.txt or new_genome_names.txt and have the old genome names on the left, tab, then the new names on the right. You can place that in the working directory. If required after making the original plot, simply take genomesAdded.txt from the output directory, add new names on the same line after tabbing, and run that part of the script in the newRscript.r output in the output directory. 
 
 # Required dependencies (and their associated dependencies)
 **ALTER** https://github.com/sing-group/ALTER  
@@ -123,6 +131,6 @@ If the user needs to change the names of some of the genomes (for instance, thos
 
 **MAFFT** https://mafft.cbrc.jp/alignment/software/source.html
 
-# Example plot generated
+# Example plots generated
 ![finalPlot](https://user-images.githubusercontent.com/100131598/199327999-0e6ba88a-a502-4ada-ac83-a64e69d39491.jpg)
-
+![heatmap](https://user-images.githubusercontent.com/100131598/228218314-bca69119-0426-4ea8-9d37-bf3a9a0acb37.jpg)
