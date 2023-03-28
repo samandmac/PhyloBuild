@@ -23,7 +23,7 @@ for line in open(path + "/phylogeny_list.txt"):
     clade = fields[0]
     name = fields[1]
     if clade not in ('I','II','III','IV','V'):
-        new_phylogeny_list.write(clade + "\t" + name + "\n")
+        new_phylogeny_list.write(name + "\t" + clade + "\n")
         new_genome_list.write(name + "\n")
     else:
         print("Removed " + name + " as it was designated a clade " + clade + " phylogroup.")
