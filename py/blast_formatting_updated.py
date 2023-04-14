@@ -16,8 +16,8 @@ import sys
 file_names = []
 
 #This allows user inputted genome and gene directories.
-#blast_directory = sys.argv[1]
-blast_directory = "/media/sam/Expansion/Bioinformatics/Glasgow_Andy_Patricia_Tree/Version1/BlastResults"
+blast_directory = sys.argv[1]
+#blast_directory = "/media/sam/Expansion/Bioinformatics/Glasgow_Andy_Patricia_Tree/Version1/BlastResults"
 
 #For each file in the blast directory, add to the file name list
 for file_name in os.listdir(blast_directory):
