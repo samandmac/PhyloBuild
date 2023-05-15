@@ -317,7 +317,7 @@ if (groups_yn == "yes"){
         theme(legend.box.spacing = unit(0, "pt"))
     }
       #And finally saving that plot.
-    save_plot(plot_heatmap, 1300, 1300, paste(args[1],"/finalPlot.EMF", sep =""))
+    save_plot(tree.plot, 1300, 1300, paste(args[1],"/finalPlot.EMF", sep =""))
   }
 }
 
@@ -342,7 +342,7 @@ if (groups_yn == "no"){
     }
     
     #And finally saving that plot.
-    save_plot(plot_heatmap, 1300, 1300, paste(args[1],"/finalPlot.EMF", sep =""))
+    save_plot(tree.plot, 1300, 1300, paste(args[1],"/finalPlot.EMF", sep =""))
   }
   if (gene_names == "yes"){
     #Below is the script for when pgroup labels aren't required.
@@ -363,7 +363,7 @@ if (groups_yn == "no"){
         theme(legend.box.spacing = unit(0, "pt"))
     }
     #And finally saving that plot.
-    save_plot(plot_heatmap, 1300, 1300, paste(args[1],"/finalPlot.EMF", sep =""))
+    save_plot(tree.plot, 1300, 1300, paste(args[1],"/finalPlot.EMF", sep =""))
   }
 }
 
