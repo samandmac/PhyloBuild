@@ -15,6 +15,8 @@ rename_genomes = sys.argv[2]
 working_directory = sys.argv[3]
 grouping = sys.argv[4]
 rename_genes = sys.argv[5]
+genes_oi = sys.argv[6]
+genomes_oi = sys.argv[7]
 
 new_file = open(path+ "/newRscript.r", "w")
 
@@ -32,5 +34,9 @@ for line in open(working_directory+"/generate_plot.r"): #take file line by line
         fields = re.sub("args\[3]","\""+ grouping +"\"", fields)
     if re.search("args\[4]", fields):
     	fields = re.sub("args\[4]","\""+ rename_genes + "\"", fields)
+    if re.search("args\[5]", fields):
+    	fields = re.sub("args\[5]","\""+ genes_oi + "\"", fields)
+    if re.search("args\[6]", fields):
+    	fields = re.sub("args\[6]","\""+ genomes_oi + "\"", fields)    
     	   
     new_file.write(fields + "\n")
