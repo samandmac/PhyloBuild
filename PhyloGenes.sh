@@ -192,7 +192,7 @@ if [ $mac == "yes" ]; then
 	echo "Extracting the geneList.txt from the orthologs."
 	
 	#Updates the sed command, it wasn't working on my home computer (uses windows) but once I switched it to the below simply by changing the Aa-Zz to just A-z and added the ] after the last ) - it worked completely fine.
-	gsed '/^>/ s/^.*gene=\([Aa-Zz]\+\).*/\1/' Z_Orthologs.txt | gsed '1~2s/^/>/' > $genesForTree/geneList.txt
+	gsed '/^>/ s/^.*gene=\([Aa-Zz]\+\).*/\1/' Z_Orthologs.txt | gsed '1~2s/^/>/' > $genesForTree/geneList.fasta
 fi
 
 if [ $mac == "no" ]; then
@@ -209,8 +209,8 @@ if [ $mac == "no" ]; then
 	echo "Extracting the geneList.txt from the orthologs."
 	
 	#Updates the sed command, it wasn't working on my home computer (uses windows) but once I switched it to the below simply by changing the Aa-Zz to just A-z and added the ] after the last ) - it worked completely fine.
-	sed '/^>/ s/^.*gene=\([Aa-Zz]\+\).*/\1/' Z_Orthologs.txt | sed '1~2s/^/>/' > $genesForTree/geneList.txt
-	#sed '/^>/ s/^.*gene=\([A-z]\+\)].*/\1/' Z_Orthologs.txt | sed '1~2s/^/>/' > $genesForTree/geneList.txt
+	sed '/^>/ s/^.*gene=\([Aa-Zz]\+\).*/\1/' Z_Orthologs.txt | sed '1~2s/^/>/' > $genesForTree/geneList.fasta
+	#sed '/^>/ s/^.*gene=\([A-z]\+\)].*/\1/' Z_Orthologs.txt | sed '1~2s/^/>/' > $genesForTree/geneList.fasta
 fi
 
 #for only top 10
