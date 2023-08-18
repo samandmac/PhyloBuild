@@ -146,7 +146,7 @@ if (genes_oi == "yes"){
     #Next we combine all the data saved in the datalist into one data table.
     heatmap = Reduce(merge, lapply(datalist, function(x) data.frame(x, rn = row.names(x))))
     row.names(heatmap) = heatmap[,1] #CHange the row names to the genome names
-    heatmap = heatmap[,-1)] #Remove the genome name as a column.
+    heatmap = heatmap[,-1] #Remove the genome name as a column.
   }
   
   #If not grouping
