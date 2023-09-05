@@ -146,7 +146,7 @@ if (genes_oi == "yes"){
     #Next we combine all the data saved in the datalist into one data table.
     heatmap = Reduce(merge, lapply(datalist, function(x) data.frame(x, rn = row.names(x))))
     row.names(heatmap) = heatmap[,1] #CHange the row names to the genome names
-    heatmap = heatmap[,-1)] #Remove the genome name as a column.
+    heatmap = heatmap[,-1] #Remove the genome name as a column.
   }
   
   #If not grouping
@@ -214,7 +214,8 @@ if (genes_oi == "yes"){
         #ylab(label = "Strain")+
         #xlab(label = "Gene")
     }
-    save_plot(map, 500, 500, paste(args[1],"/heatmap_carriage.emf", sep =""))
+    #save_plot(map, 500, 500, paste(args[1],"/heatmap_carriage.emf", sep =""))
+    ggsave(filename = paste(args[1],"/heatmap_carriage.emf", sep =""), plot = map, width = 5, height = 5)
   }
   
   if (gene_names == "yes"){
@@ -271,7 +272,8 @@ if (genes_oi == "yes"){
         #labs(fill = "Genes")
         labs(x="", y="")
     }
-    save_plot(map, 500, 500, paste(args[1],"/heatmap_carriage.emf", sep =""))
+    #save_plot(map, 500, 500, paste(args[1],"/heatmap_carriage.emf", sep =""))
+    ggsave(filename = paste(args[1],"/heatmap_carriage.emf", sep =""), plot = map, width = 5, height = 5)
   }
 }
 
@@ -295,7 +297,8 @@ if (groups_yn == "yes"){
         theme(legend.box.spacing = unit(0, "pt"))
     }
     #And finally saving that plot.
-    save_plot(tree.plot, 1300, 1300, paste(args[1],"/finalPlot.EMF", sep =""))
+    #save_plot(tree.plot, 1300, 1300, paste(args[1],"/finalPlot.EMF", sep =""))
+    ggsave(filename = paste(args[1],"/finalPlot.EMF", sep =""), plot = tree.plot, width = 15, height = 15)
   }
   
   if (gene_names == "yes"){
@@ -317,7 +320,8 @@ if (groups_yn == "yes"){
         theme(legend.box.spacing = unit(0, "pt"))
     }
       #And finally saving that plot.
-    save_plot(tree.plot, 1300, 1300, paste(args[1],"/finalPlot.EMF", sep =""))
+    #save_plot(tree.plot, 1300, 1300, paste(args[1],"/finalPlot.EMF", sep =""))
+    ggsave(filename = paste(args[1],"/finalPlot.EMF", sep =""), plot = tree.plot, width = 15, height = 15)
   }
 }
 
@@ -342,7 +346,8 @@ if (groups_yn == "no"){
     }
     
     #And finally saving that plot.
-    save_plot(tree.plot, 1300, 1300, paste(args[1],"/finalPlot.EMF", sep =""))
+    ggsave(filename = paste(args[1],"/finalPlot.EMF", sep =""), plot = tree.plot, width = 15, height = 15)
+    #save_plot(tree.plot, 1300, 1300, paste(args[1],"/finalPlot.EMF", sep =""))
   }
   if (gene_names == "yes"){
     #Below is the script for when pgroup labels aren't required.
@@ -363,7 +368,8 @@ if (groups_yn == "no"){
         theme(legend.box.spacing = unit(0, "pt"))
     }
     #And finally saving that plot.
-    save_plot(tree.plot, 1300, 1300, paste(args[1],"/finalPlot.EMF", sep =""))
+    ggsave(filename = paste(args[1],"/finalPlot.EMF", sep =""), plot = tree.plot, width = 15, height = 15)
+    #save_plot(tree.plot, 1300, 1300, paste(args[1],"/finalPlot.EMF", sep =""))
   }
 }
 

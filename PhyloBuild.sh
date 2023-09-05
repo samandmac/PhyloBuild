@@ -311,7 +311,7 @@ else #Now I've removed the alternative IF statement and put the ELSE instead.
 		then
 			#We run the blastn for the genes to make the tree and save in BlastResults
 			echo "Running blastn on $x to identify gene carriage and sequences for template genes (for the tree)"
-			blastn -query $genesForTree/geneList.txt -subject $genomesForTree/$x.fasta -qcov_hsp_perc 80 -perc_identity 70 -outfmt "6 qseqid sseq pident" | sed 's/^\(.\{0\}\)/\1>/' | tr '\t' '\n' >  $blastResults/$x.fasta 
+			blastn -query $genesForTree/geneList.fasta -subject $genomesForTree/$x.fasta -qcov_hsp_perc 80 -perc_identity 70 -outfmt "6 qseqid sseq pident" | sed 's/^\(.\{0\}\)/\1>/' | tr '\t' '\n' >  $blastResults/$x.fasta 
 		else
 			blastn -query $genesForTree/geneList.fasta -subject $genomesForTree/$x.fasta -perc_identity 70 -qcov_hsp_perc 20 -outfmt "6 qseqid sseq pident" -task blastn | sed 's/^\(.\{0\}\)/\1>/' | tr '\t' '\n' >  $blastResults/$x.fasta 
 		fi
