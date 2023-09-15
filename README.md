@@ -9,20 +9,20 @@
 [Example plot](#example-plot-generated)
 
 
-# PhyloTree - Pipeline
-Included in this software are a number of scripts that can be used to generate a phylogenetic tree of particular genomes/strains, investigate carriage of specific genes of interest in genomes/strains, or use the software to visualise a tree previously obtained through PhyloTree or other means. A number of different parameters allow for user customisation of options for their run, and with visualisation. These are further explained below.
+# PhyloBuild - Pipeline
+Included in this software are a number of scripts that can be used to generate a phylogenetic tree of particular genomes/strains, investigate carriage of specific genes of interest in genomes/strains, or use the software to visualise a tree previously obtained through PhyloBuild or other means. A number of different parameters allow for user customisation of options for their run, and with visualisation. These are further explained below.
 
-# Prior to PhyloTree.sh
-Some tools may be used before PhyloTree.sh is ran, which will be described here.  
+# Prior to PhyloBuild.sh
+Some tools may be used before PhyloBuild.sh is ran, which will be described here.  
 
-   **PhyloGenes.sh** allows user to auto-generate a "rough-and-ready" geneList.txt file (which is used to split the genomes/strains on the tree by their evolutionary similarity) containing orthologs present in all genomes/strains used. By inputting a reference genome full set of gene sequences. This can easily be downloaded from NCBI, although a caveat of this step is that the more genomes used the better (around 131 different strains in our tests gives off good separation in the tree) - as some orthologs may have little variation in fewer genomes/strains. Alternatively, the user can collect their own orthologs or genes known to be present in a subset of the species to split the genomes/strains by their evolutionary similarity.
+   **PhyloGenes.sh** allows user to auto-generate a "rough-and-ready" geneList.txt file (which is used to split the genomes/strains on the tree by their evolutionary similarity) containing orthologues present in all genomes/strains used. *The user should consider generating their own list of orthologues, or regions of similarity, instead of relying on this method. However, it exists for now as a quick way to run PhyloBuild.*  By inputting a reference genome full set of gene sequences. This can easily be downloaded from NCBI, although a caveat of this step is that the more genomes used the better (around 131 different strains in our tests gives off good separation in the tree) - as some orthologs may have little variation in fewer genomes/strains. Alternatively, the user can collect their own orthologs or genes known to be present in a subset of the species to split the genomes/strains by their evolutionary similarity.
    
    **PhyloGroup.sh** allows the user to group E.coli strains by their phylogroup by generating a group_list.txt file (this is simply used to colour genome/strain names on the final plot, and is run optionally), designated through the Clermont Scheme sequences. Although a lot of testing has been performed utilising E.coli datasets, the software is not hard-coded to one particular species, and this should be considered an extra feature. User can indicate their own grouping scheme for strains simply by making their own group_list.txt file (tab separated, grouping then the strain name).
 
 These can be ran simply as `bash Phyloxxxx.sh`, which makes the assumption you are working from the working directory containing the files as in the gitHub default. The scripts do have default parameter options, so do ensure that you make sure you are selecting the parameters specific to what you want to happen in the run.
 
 # Usage 
-`bash PhyloTree.sh [OPTIONAL PARAMETERS]`
+`bash PhyloBuild.sh [OPTIONAL PARAMETERS]`
 
    **[--genes_interest, -a]** : Path to location of genes of interest directory, which should contain the genes of interest. Default is set to your working directory, and the file "Genes". E.g. your_working_directory/Genes. Inside this file should be the Template_Genes file, which contains a FASTA format list of genes used to separate strains for the tree 
 
@@ -60,7 +60,7 @@ These can be ran simply as `bash Phyloxxxx.sh`, which makes the assumption you a
    
 # Steps in pipeline
 
-We could use PhyloTree.sh to generate a tree and use this to plot the carriage. The typical steps of this script are below, but of course depend on what parameters the user has chosen:
+We could use PhyloBuild.sh to generate a tree and use this to plot the carriage. The typical steps of this script are below, but of course depend on what parameters the user has chosen:
 
    1. We need a fasta file containing sequences of genes that will be used to separate the tree by evolutionary similarity, and we need a number of different fasta files of genomes/strains that we can use for the tree. Optionally, we could also include a fasta file containing the gene sequences for investigating carriage, and also populate the Genomes_Interest folder with genomes/strains that we are specifically interested in highlighting.
 	
@@ -95,14 +95,12 @@ We generate a number of files in the output, they could be:
    
    **A heatmap showing carriage only, in the strains that you specified as of interest (so not every single strain, unless they are located in the Genomes_Interest folder and you specified that this was a parameter), not including a tree. As an EMF file.**  
    
-   **A tab-separated .txt file called sample_sheet.txt in your working directory, that will contain the information designated by the parameters specified by the user for the visualisation step - this is automatically generated once PhyloTree.sh is run, unless the user has created their own sample sheet and specified this in the parameters.**  
+   **A tab-separated .txt file called sample_sheet.txt in your working directory, that will contain the information designated by the parameters specified by the user for the visualisation step - this is automatically generated once PhyloBuild.sh is run, unless the user has created their own sample sheet and specified this in the parameters.**  
 
 If the user needs to change the names of some of the (carriage) genes or genomes, simply make a txt file called new_gene_names.txt or new_genome_names.txt and have the old genome names on the left, tab, then the new names on the right. You can place that in the working directory. If required after making the original plot, simply take genomesAdded.txt from the output directory, add new names on the same line after tabbing, and run that part of the script in the newRscript.r output in the output directory. 
 
 # Required dependencies (and their associated dependencies)
-**ALTER** https://github.com/sing-group/ALTER  
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**JAVA** https://java.com/en/download/  
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**Maven Tool** https://maven.apache.org/download.cgi
+**trimAl** https://github.com/sing-group/ALTER  
    
 **NCBI BLAST** https://www.ncbi.nlm.nih.gov/books/NBK569861/
 
