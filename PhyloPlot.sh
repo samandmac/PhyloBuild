@@ -13,8 +13,8 @@ genomes_oi=`awk '{print $7}' r_script_parameters.txt`
 
 echo "##### Generating Plot through R #####"
 Rscript generate_plot.r $plots $rename_genomes $grouping $rename_genes $genes_oi $genomes_oi
-cp $plots/finalPlot.EMF $plots/finalPlot.$$.EMF
-rm $plots/finalPlot.EMF
+cp $plots/finalPlot.svg $plots/finalPlot.$$.svg
+rm $plots/finalPlot.svg
 echo "Rscript ran, output finalPlot.$$.EMF should be in $plots"
 
 #This is simply the python script which switches args with the user's paths, options, etc.
