@@ -15,7 +15,7 @@
 	
 #6. Once we have a .phy file, we can generate a tree using phyml. This generates a whole bunch of files, but the important one is saved to the output folder (it's the one needed for R plots).
 	
-#7. Once that's done, we can then run the R script and generate a plot. This will be made in the output folder, alongside other data files used in the R script - including the list of gene carriage for the strains, a list of the genes of interest, a list of the genomes used, a list of the genomes that were added to the template folder (and removed), and the Newick format file which contains the tree information. I've since separated the tree making step from the visualisation of the plot, so they will need to be run separately - PhyloPlots.sh should be run after the PhyloTree.sh (and can even be run straight after through the parameters).
+#7. Once that's done, we can then run the R script and generate a plot. This will be made in the output folder, alongside other data files used in the R script - including the list of gene carriage for the strains, a list of the genes of interest, a list of the genomes used, a list of the genomes that were added to the template folder (and removed), and the Newick format file which contains the tree information. I've since separated the tree making step from the visualisation of the plot, so they will need to be run separately - PhyloPlots.sh should be run after the PhyloBuild.sh (and can even be run straight after through the parameters).
 
 #### START OF THE SCRIPT ####
 #Here we begin timing to see how long processes are taking.
@@ -124,7 +124,7 @@ rename_genes=${rename_genes:-"no"}					#Indication of whether user wishes to ren
 phylogenes=${phylogenes:-"no"}						#Indication of whether the user used PhyloGenes beforehand or not
 genes_oi=${genes_oi:-"no"}						#Indication of whether the user will have genes of interest in file or not
 genomes_oi=${genomes_oi:-"no"}						#Indication of whether the user will have genomes of interest or not
-sample_sheet=${sample_sheet:-"no"}					#Indication of whether the user has a sample sheet pre-PhyloTree.
+sample_sheet=${sample_sheet:-"no"}					#Indication of whether the user has a sample sheet pre-PhyloBuild.
 run_phyloplot=${run_phyloplot:-"no"}					#Indication of whether the user is needing to run visualisation straight after.
 viral_strains=${viral_strains:-"no"}					#Indication of whether the user is running an analysis with viral strains 
 make_tree=${make_tree:-"yes"}						#Indication of whether the user wants to generate a tree or just run the carriage genes step
@@ -357,7 +357,7 @@ echo "##### Step 3: Running alignment #####"
 perl align_blast.pl BlastResults ALIGNMENTS
 find . -name 'ALIGNMENTS.*.fasta' -delete #removes unecessary .fasta files generated from script
 #One slightly annoying thing about this perl script is that concatenation back to the final file for some reason seems to mess with the number of sequences, such that if we ended up using different sequence for the geneList file, then occasionally we get an error which says that the length of sequences differs - which fails the script. Therefore, in addition to the align_blast.pl, I have to run MAFFT on the final concatenated file.
-mafft --auto Final.ALIGNMENTS.aln > Final.Aligned.aln
+#mafft --auto Final.ALIGNMENTS.aln > Final.Aligned.aln
 
 #This is the python script used to run alignment using MAFFT
 #cd $working_directory/py
@@ -371,8 +371,11 @@ mafft --auto Final.ALIGNMENTS.aln > Final.Aligned.aln
 echo "##### Step 4: Changing .aln format to .phy #####"
 #java -jar $working_directory/ALTER/alter-lib/target/ALTER-1.3.4-jar-with-dependencies.jar -cg -i final_alignment.tsv -ia -io Linux -o phylipFor.phy -of PHYLIP -oo Linux -op PhyML
 
-java -jar $working_directory/ALTER/alter-lib/target/ALTER-1.3.4-jar-with-dependencies.jar -cg -i Final.Aligned.aln -ia -io Linux -o phylipFor.phy -of PHYLIP -oo Linux -op PhyML
-cp final_alignment.tsv $plots/final_alignment.tsv
+#java -jar $working_directory/ALTER/alter-lib/target/ALTER-1.3.4-jar-with-dependencies.jar -cg -i Final.Aligned.aln -ia -io Linux -o phylipFor.phy -of PHYLIP -oo Linux -op PhyML
+
+trimal -in Final.ALIGNMENTS.aln -phylip -out phylipFor.phy -gappyout -keepheader
+
+#cp final_alignment.tsv $plots/final_alignment.tsv
 
 #Step 5, where we run phyml. We use a bootstrap repition of 100.
 echo "##### Step 5: Producing Phylogenetic Tree #####"
