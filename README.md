@@ -100,7 +100,7 @@ We generate a number of files in the output, they could be:
 If the user needs to change the names of some of the (carriage) genes or genomes, simply make a txt file called new_gene_names.txt or new_genome_names.txt and have the old genome names on the left, tab, then the new names on the right. You can place that in the working directory. If required after making the original plot, simply take genomesAdded.txt from the output directory, add new names on the same line after tabbing, and run that part of the script in the newRscript.r output in the output directory. 
 
 # Required dependencies (and their associated dependencies)
-**trimAl** https://github.com/sing-group/ALTER  
+**trimAl** https://github.com/inab/trimal  
    
 **NCBI BLAST** https://www.ncbi.nlm.nih.gov/books/NBK569861/
 
