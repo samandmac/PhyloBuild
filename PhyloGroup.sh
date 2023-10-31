@@ -127,7 +127,7 @@ ls *.fasta | sed 's/.fasta//g' > $plots/listGenomes.txt
 #TL:DR - makeGenes.sh gets the genes (from a reference genome) and finds orthologs in all genomes being queried. NOTE: We only use 10 results at the moment to save time.
 cd $working_directory
 
-cd ClermonTyping-master/
+cd ClermonTyping/
 
 #We now run a ClermonTyping without Mash - which would also assign phylogroups, but isn't necessary because we don't use it.
 for x in `cat $plots/listGenomes.txt`
